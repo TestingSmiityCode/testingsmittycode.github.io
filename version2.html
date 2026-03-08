@@ -1,0 +1,1637 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Codebeautify.org Text to HTML Converter</title>
+	</head>
+	<body>
+		<p>
+			<!DOCTYPE html>
+			<html lang="en">
+				<head>
+					<meta charset="UTF-8">
+						<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+							<title>Echoes of Archon - The Hunt</title>
+							<style>
+ 
+        body {
+ 
+            margin: 0; overflow: hidden; background-color: #ff8855; 
+ 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+ 
+            color: #fff; user-select: none; touch-action: none;
+ 
+        }
+ 
+
+ 
+        #game-canvas { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; }
+ 
+        
+ 
+        #ui-layer { 
+ 
+            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; 
+ 
+            z-index: 10; pointer-events: none; 
+ 
+            display: flex; flex-direction: column; justify-content: space-between;
+ 
+        }
+ 
+
+ 
+        /* Start Screen / Blocker */
+ 
+        #blocker {
+ 
+            position: absolute; width: 100%; height: 100%;
+ 
+            background-color: rgba(20, 10, 10, 0.9);
+ 
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+ 
+            z-index: 50; pointer-events: auto; backdrop-filter: blur(5px);
+ 
+        }
+ 
+
+ 
+        #blocker h1 { font-size: 4.5rem; margin-bottom: 0; text-shadow: 0 0 15px #ff5500; text-align: center; letter-spacing: 2px; color: #ffaa88;}
+ 
+        #blocker h2 { font-size: 1.8rem; color: #ffcc00; margin-bottom: 20px; font-weight: 300; letter-spacing: 5px;}
+ 
+        #blocker p { font-size: 1.1rem; color: #ffddcc; margin-bottom: 30px; text-align: center; max-width: 600px; line-height: 1.6;}
+ 
+        
+ 
+        .controls-text { font-size: 1rem; color: #ddd; background: rgba(0,0,0,0.6); padding: 15px 25px; border-radius: 8px; border: 1px solid #663311;}
+ 
+        .controls-text span { color: #ffaa00; font-weight: bold; }
+ 
+
+ 
+        .btn { padding: 15px 40px; font-size: 1.2rem; background: #cc4400; color: white; border: 2px solid #ff7700; border-radius: 5px; cursor: pointer; transition: 0.2s; font-weight: bold; margin-top: 25px; letter-spacing: 1px;}
+ 
+        .btn:hover { background: #ff5500; box-shadow: 0 0 20px rgba(255, 85, 0, 0.6); transform: scale(1.05);}
+ 
+
+ 
+        /* HUD */
+ 
+        #top-hud { padding: 20px; font-size: 1.3rem; font-weight: bold; text-shadow: 2px 2px 4px #000; }
+ 
+        #hud-accent { color: #ffaa00; font-size: 1.5rem;}
+ 
+        #weapon-status { color: #ccc; font-size: 1rem; margin-top: 5px; }
+ 
+        
+ 
+        #crosshair {
+ 
+            position: absolute; top: 50%; left: 50%; width: 6px; height: 6px;
+ 
+            background: rgba(255,255,255,0.8); border-radius: 50%;
+ 
+            transform: translate(-50%, -50%); box-shadow: 0 0 5px #000;
+ 
+        }
+ 
+
+ 
+        #prompt {
+ 
+            position: absolute; bottom: 35%; left: 50%; transform: translateX(-50%);
+ 
+            font-size: 1.4rem; font-weight: bold; background: rgba(0,0,0,0.8); color: #fff;
+ 
+            padding: 10px 30px; border-radius: 8px; display: none; border: 1px solid #ffaa00; box-shadow: 0 0 15px rgba(255, 170, 0, 0.3);
+ 
+        }
+ 
+
+ 
+        /* Repair Progress Bar */
+ 
+        #repair-bar-container {
+ 
+            position: absolute; bottom: 30%; left: 50%; transform: translateX(-50%);
+ 
+            width: 300px; height: 20px; background: rgba(0, 0, 0, 0.6);
+ 
+            border: 2px solid #444; border-radius: 10px; display: none; overflow: hidden;
+ 
+            box-shadow: 0 0 10px rgba(0,0,0,0.8);
+ 
+        }
+ 
+        #repair-bar {
+ 
+            width: 0%; height: 100%; background: linear-gradient(90deg, #ff5500, #ffaa00);
+ 
+            transition: width 0.1s;
+ 
+        }
+ 
+
+ 
+        #notification {
+ 
+            position: absolute; top: 100px; left: 50%; transform: translateX(-50%);
+ 
+            font-size: 1.2rem; color: #ffcc00; font-weight: bold; text-shadow: 2px 2px 5px #000;
+ 
+            opacity: 0; transition: opacity 0.3s; text-align: center; background: rgba(0,0,0,0.6); padding: 10px 20px; border-radius: 5px;
+ 
+        }
+ 
+
+ 
+        /* Target UI */
+ 
+        #boss-ui {
+ 
+            position: absolute; top: 20px; right: 20px; display: none;
+ 
+            background: rgba(40,10,0,0.8); padding: 15px 25px; border-radius: 5px; border: 2px solid #ff3300;
+ 
+            animation: pulse-border 2s infinite;
+ 
+        }
+ 
+        #boss-name { font-size: 1.2rem; text-align: center; font-weight: bold; color: #ff5555; letter-spacing: 2px; text-shadow: 1px 1px 2px #000;}
+ 
+        #boss-sub { font-size: 0.9rem; color: #aaa; text-align: center; margin-top: 5px; letter-spacing: 1px;}
+ 
+
+ 
+        @keyframes pulse-border {
+ 
+            0% { box-shadow: 0 0 5px #aa0000; }
+ 
+            50% { box-shadow: 0 0 20px #ff3300; }
+ 
+            100% { box-shadow: 0 0 5px #aa0000; }
+ 
+        }
+ 
+
+ 
+        /* End Screens */
+ 
+        .end-screen {
+ 
+            position: absolute; width: 100%; height: 100%; top: 0; left: 0;
+ 
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+ 
+            z-index: 70; pointer-events: auto;
+ 
+        }
+ 
+        #win-screen { background-color: rgba(30, 20, 10, 0.95); }
+ 
+        #death-screen { background-color: rgba(40, 10, 10, 0.95); }
+ 
+        .ending-title { font-size: 5rem; margin-bottom: 15px; text-shadow: 0 0 30px #000; letter-spacing: 5px; text-align: center;}
+ 
+    </style>
+						</head>
+						<body>
+							<div id="ui-layer">
+								<div id="top-hud">
+ 
+            MACHINES REPAIRED: 
+									<span id="machine-count" id="hud-accent">0</span> / 8
+									<br>
+										<div id="weapon-status">WEAPON: UNARMED</div>
+									</div>
+									<div id="crosshair"></div>
+									<div id="prompt">Hold [E] to Attach & Repair</div>
+									<div id="repair-bar-container">
+										<div id="repair-bar"></div>
+									</div>
+									<div id="notification"></div>
+									<div id="boss-ui">
+										<div id="boss-name">THREAT DETECTED: SUBJECT 89</div>
+										<div id="boss-sub">FIND AND EXECUTE TARGET</div>
+									</div>
+								</div>
+								<!-- Main Menu -->
+								<div id="blocker">
+									<h1>ECHOES OF ARCHON</h1>
+									<h2>THE HUNT</h2>
+									<p>The facility has been breached. The Archon energy network is failing in Sector 4.
+										<br>Hold [E] to repair the 8 remaining localized generators to power up the armory.
+										</p>
+										<div class="controls-text">
+											<span>WASD</span> Move &nbsp;|&nbsp; 
+											<span>SPACE</span> Jump &nbsp;|&nbsp; 
+											<span>HOLD E</span> Repair &nbsp;|&nbsp; 
+											<span>Left Click</span> Attack
+ 
+        
+										</div>
+										<button class="btn" id="start-btn">INITIALIZE SIMULATION</button>
+									</div>
+									<!-- Win / Loss Screens -->
+									<div id="win-screen" class="end-screen">
+										<h1 class="ending-title" style="color: #ffaa00;">TARGET EXECUTED</h1>
+										<p style="font-size: 1.5rem; color: #ddd; max-width: 600px; text-align: center; margin-bottom: 30px;">
+ 
+            Subject 89 has been neutralized. The localized Archon energy grid has stabilized. You have survived the hunt... for now.
+ 
+        </p>
+										<button class="btn" onclick="location.reload()">CONCLUDE SIMULATION</button>
+									</div>
+									<div id="death-screen" class="end-screen">
+										<h1 class="ending-title" style="color: #ff3333;">SYSTEM FAILURE</h1>
+										<p style="font-size: 1.8rem; color: #ddd; margin-bottom: 40px;">Subject 89 remains active. You have been consumed.</p>
+										<button class="btn" onclick="location.reload()">RETRY SIMULATION</button>
+									</div>
+									<!-- Scripts -->
+									<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+									<script>
+ 
+        // --- GAME STATE ---
+ 
+        let scene, camera, renderer;
+ 
+        let prevTime = performance.now();
+ 
+        
+ 
+        // Raycaster for Execution
+ 
+        const raycaster = new THREE.Raycaster();
+ 
+        const screenCenter = new THREE.Vector2(0, 0);
+ 
+
+ 
+        // Custom TPS Controls
+ 
+        let isLocked = false;
+ 
+        let yawObj = new THREE.Group();   
+ 
+        let pitchObj = new THREE.Group(); 
+ 
+        
+ 
+        let velocity = new THREE.Vector3();
+ 
+        let direction = new THREE.Vector3();
+ 
+        let moveForward = false, moveBackward = false, moveLeft = false, moveRight = false, canJump = false;
+ 
+        let keyE = false; // Track holding E
+ 
+        
+ 
+        // Player Model
+ 
+        let playerGroup, playerArmL, playerArmR, playerLegL, playerLegR;
+ 
+        let isMoving = false, isAttacking = false;
+ 
+
+ 
+        // Game Logic Variables
+ 
+        const MAP_SIZE = 120;
+ 
+        const MAP_BOUND = 58; // Inner boundary for collision
+ 
+        
+ 
+        let machines = [];
+ 
+        let obstacles = []; 
+ 
+        let machinesRepaired = 0;
+ 
+        let totalMachines = 8; 
+ 
+        let axeItem = null;
+ 
+        let hasAxe = false;
+ 
+        
+ 
+        // Crab Boss
+ 
+        let theGiantCrab;
+ 
+        let crabDead = false;
+ 
+
+ 
+        // UI Elements
+ 
+        const promptEl = document.getElementById('prompt');
+ 
+        const repairContainer = document.getElementById('repair-bar-container');
+ 
+        const repairBar = document.getElementById('repair-bar');
+ 
+        const countEl = document.getElementById('machine-count');
+ 
+        const notifEl = document.getElementById('notification');
+ 
+        const weaponStatEl = document.getElementById('weapon-status');
+ 
+        const bossUI = document.getElementById('boss-ui');
+ 
+
+ 
+        init();
+ 
+        animate();
+ 
+
+ 
+        function init() {
+ 
+            // Scene & Sunset Sky Setup
+ 
+            scene = new THREE.Scene();
+ 
+            scene.background = new THREE.Color(0xff8855); // Sunset Orange
+ 
+            scene.fog = new THREE.FogExp2(0xff6644, 0.02); // Warm atmospheric fog
+ 
+
+ 
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+ 
+            renderer.setSize(window.innerWidth, window.innerHeight);
+ 
+            renderer.shadowMap.enabled = true;
+ 
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+ 
+            document.body.appendChild(renderer.domElement);
+ 
+
+ 
+            // Sunset Lighting
+ 
+            const hemiLight = new THREE.HemisphereLight(0xffbb88, 0x443355, 0.8);
+ 
+            scene.add(hemiLight);
+ 
+
+ 
+            const sunLight = new THREE.DirectionalLight(0xffaa55, 1.5);
+ 
+            sunLight.position.set(-50, 20, -50); // Low angle sun
+ 
+            sunLight.castShadow = true;
+ 
+            sunLight.shadow.mapSize.width = 2048;
+ 
+            sunLight.shadow.mapSize.height = 2048;
+ 
+            sunLight.shadow.camera.left = -60; sunLight.shadow.camera.right = 60;
+ 
+            sunLight.shadow.camera.top = 60; sunLight.shadow.camera.bottom = -60;
+ 
+            scene.add(sunLight);
+ 
+
+ 
+            // Add a visual Sun Sphere in the distance
+ 
+            const sunGeo = new THREE.SphereGeometry(10, 32, 32);
+ 
+            const sunMat = new THREE.MeshBasicMaterial({ color: 0xffddaa });
+ 
+            const sunMesh = new THREE.Mesh(sunGeo, sunMat);
+ 
+            sunMesh.position.set(-100, 40, -100);
+ 
+            scene.add(sunMesh);
+ 
+
+ 
+            // Grassy Floor
+ 
+            const floorGeo = new THREE.PlaneGeometry(MAP_SIZE * 2, MAP_SIZE * 2);
+ 
+            const floorMat = new THREE.MeshStandardMaterial({ color: 0x3b5e2b, roughness: 1.0 });
+ 
+            const floor = new THREE.Mesh(floorGeo, floorMat);
+ 
+            floor.rotation.x = -Math.PI / 2;
+ 
+            floor.receiveShadow = true;
+ 
+            scene.add(floor);
+ 
+
+ 
+            // --- REBUILT THIRD PERSON RIG ---
+ 
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+ 
+            scene.add(yawObj);
+ 
+            yawObj.position.y = 1.5; 
+ 
+            
+ 
+            yawObj.add(pitchObj);
+ 
+            camera.position.set(0, 3.5, 8.5); 
+ 
+            pitchObj.rotation.x = -0.2; 
+ 
+            pitchObj.add(camera);
+ 
+
+ 
+            // --- 3D PLAYER MODEL ---
+ 
+            playerGroup = new THREE.Group();
+ 
+            const suitMat = new THREE.MeshStandardMaterial({ color: 0xcccccc, roughness: 0.5 }); 
+ 
+            const detailMat = new THREE.MeshStandardMaterial({ color: 0x222222 }); 
+ 
+            const visorMat = new THREE.MeshStandardMaterial({ color: 0xffaa00, emissive: 0xcc5500 }); 
+ 
+
+ 
+            let torso = new THREE.Group();
+ 
+            let chest = new THREE.Mesh(new THREE.BoxGeometry(1.1, 1.3, 0.6), suitMat);
+ 
+            chest.position.y = 0.65;
+ 
+            let backpack = new THREE.Mesh(new THREE.BoxGeometry(0.8, 1.0, 0.4), detailMat);
+ 
+            backpack.position.set(0, 0.7, 0.5); 
+ 
+            torso.add(chest); torso.add(backpack);
+ 
+            torso.castShadow = true;
+ 
+            playerGroup.add(torso);
+ 
+
+ 
+            let headGroup = new THREE.Group();
+ 
+            headGroup.position.set(0, 1.5, 0); 
+ 
+            let helmet = new THREE.Mesh(new THREE.SphereGeometry(0.45, 16, 16), suitMat);
+ 
+            let visor = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.3, 0.3), visorMat);
+ 
+            visor.position.set(0, 0.05, -0.35); 
+ 
+            headGroup.add(helmet); headGroup.add(visor);
+ 
+            headGroup.castShadow = true;
+ 
+            playerGroup.add(headGroup);
+ 
+
+ 
+            playerArmL = new THREE.Group(); playerArmL.position.set(-0.7, 1.2, 0);
+ 
+            let shoulderL = new THREE.Mesh(new THREE.SphereGeometry(0.25, 16, 16), detailMat);
+ 
+            let bicepL = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.15, 1.1), suitMat); bicepL.position.y = -0.55; 
+ 
+            playerArmL.add(shoulderL); playerArmL.add(bicepL); playerGroup.add(playerArmL);
+ 
+
+ 
+            playerArmR = new THREE.Group(); playerArmR.position.set(0.7, 1.2, 0);
+ 
+            let shoulderR = new THREE.Mesh(new THREE.SphereGeometry(0.25, 16, 16), detailMat);
+ 
+            let bicepR = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.15, 1.1), suitMat); bicepR.position.y = -0.55;
+ 
+            playerArmR.add(shoulderR); playerArmR.add(bicepR); playerGroup.add(playerArmR);
+ 
+
+ 
+            playerLegL = new THREE.Group(); playerLegL.position.set(-0.3, 0.0, 0);
+ 
+            let hipL = new THREE.Mesh(new THREE.SphereGeometry(0.25, 16, 16), detailMat);
+ 
+            let thighL = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.18, 1.4), suitMat); thighL.position.y = -0.7; 
+ 
+            playerLegL.add(hipL); playerLegL.add(thighL); playerGroup.add(playerLegL);
+ 
+
+ 
+            playerLegR = new THREE.Group(); playerLegR.position.set(0.3, 0.0, 0);
+ 
+            let hipR = new THREE.Mesh(new THREE.SphereGeometry(0.25, 16, 16), detailMat);
+ 
+            let thighR = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.18, 1.4), suitMat); thighR.position.y = -0.7;
+ 
+            playerLegR.add(hipR); playerLegR.add(thighR); playerGroup.add(playerLegR);
+ 
+
+ 
+            yawObj.add(playerGroup); 
+ 
+
+ 
+            // Build Enhanced Environment
+ 
+            buildEnvironment();
+ 
+
+ 
+            // Event Listeners
+ 
+            window.addEventListener('resize', onWindowResize);
+ 
+            document.addEventListener('keydown', onKeyDown);
+ 
+            document.addEventListener('keyup', onKeyUp);
+ 
+            document.addEventListener('mousedown', onMouseDown);
+ 
+            document.addEventListener('mousemove', onMouseMove);
+ 
+
+ 
+            // Pointer Lock Setup
+ 
+            const blocker = document.getElementById('blocker');
+ 
+            const startBtn = document.getElementById('start-btn');
+ 
+            
+ 
+            startBtn.addEventListener('click', () => {
+ 
+                document.body.requestPointerLock();
+ 
+            });
+ 
+
+ 
+            document.addEventListener('pointerlockchange', () => {
+ 
+                isLocked = document.pointerLockElement === document.body;
+ 
+                if (!isLocked && !crabDead) blocker.style.display = 'flex';
+ 
+                else blocker.style.display = 'none';
+ 
+            });
+ 
+        }
+ 
+
+ 
+        function generateDetailedBuilding(x, z) {
+ 
+            const bGroup = new THREE.Group();
+ 
+            const concMat = new THREE.MeshStandardMaterial({color: 0x666666, roughness: 0.9});
+ 
+            const glassMat = new THREE.MeshStandardMaterial({color: 0x111111, roughness: 0.2, metalness: 0.8}); // Dark windows
+ 
+            
+ 
+            // Randomize building size
+ 
+            const floors = 2 + Math.floor(Math.random() * 3);
+ 
+            const width = 6 + Math.random() * 5;
+ 
+            const depth = 6 + Math.random() * 5;
+ 
+            const fHeight = 4;
+ 
+
+ 
+            for(let i=0; i
+										<floors; i++) {
+ 
+                // Main concrete block for the floor
+ 
+                const block = new THREE.Mesh(new THREE.BoxGeometry(width, fHeight, depth), concMat);
+ 
+                block.position.y = i * fHeight + (fHeight/2);
+ 
+                block.castShadow = true; block.receiveShadow = true;
+ 
+                bGroup.add(block);
+ 
+
+ 
+                // Add dark horizontal window strips slightly protruding
+ 
+                if (i > 0 || Math.random() > 0.5) {
+ 
+                    const winTrim = new THREE.Mesh(new THREE.BoxGeometry(width + 0.2, fHeight * 0.4, depth + 0.2), glassMat);
+ 
+                    winTrim.position.y = i * fHeight + (fHeight/2);
+ 
+                    bGroup.add(winTrim);
+ 
+                }
+ 
+            }
+ 
+            
+ 
+            // Roof destruction / Rubble
+ 
+            const topY = floors * fHeight;
+ 
+            for(let j=0; j
+											<4; j++) {
+ 
+                let rubble = new THREE.Mesh(new THREE.BoxGeometry(2, 2, 2), concMat);
+ 
+                rubble.position.set((Math.random()-0.5)*(width-2), topY + 1, (Math.random()-0.5)*(depth-2));
+ 
+                rubble.rotation.set(Math.random(), Math.random(), Math.random());
+ 
+                bGroup.add(rubble);
+ 
+            }
+ 
+
+ 
+            bGroup.position.set(x, 0, z);
+ 
+            bGroup.rotation.y = Math.random() * Math.PI;
+ 
+            scene.add(bGroup);
+ 
+            
+ 
+            // Add collision
+ 
+            obstacles.push({x: x, z: z, radius: Math.max(width, depth)/2 + 1});
+ 
+        }
+ 
+
+ 
+        function generateBrokenCar(x, z, rotY) {
+ 
+            const carGroup = new THREE.Group();
+ 
+            const rustMat = new THREE.MeshStandardMaterial({color: 0x4a2e20, roughness: 0.9, metalness: 0.3}); // Rusty brown
+ 
+            const darkMat = new THREE.MeshStandardMaterial({color: 0x111111, roughness: 0.8}); // Tires/Glass
+ 
+
+ 
+            // Chassis
+ 
+            const chassis = new THREE.Mesh(new THREE.BoxGeometry(4.5, 1.2, 2.2), rustMat);
+ 
+            chassis.position.y = 1.0;
+ 
+            chassis.castShadow = true; 
+ 
+            carGroup.add(chassis);
+ 
+
+ 
+            // Cabin (smashed/angled)
+ 
+            const cabin = new THREE.Mesh(new THREE.BoxGeometry(2.5, 1.0, 2.0), rustMat);
+ 
+            cabin.position.set(-0.5, 2.0, 0);
+ 
+            cabin.rotation.z = (Math.random() - 0.5) * 0.2; // Slight tilt to look broken
+ 
+            cabin.castShadow = true; 
+ 
+            carGroup.add(cabin);
+ 
+
+ 
+            // Wheels (4)
+ 
+            const wheelGeo = new THREE.CylinderGeometry(0.5, 0.5, 0.4, 16);
+ 
+            wheelGeo.rotateX(Math.PI/2);
+ 
+            const wPos = [
+ 
+                [-1.5, 0.5, 1.1], [1.5, 0.5, 1.1],
+ 
+                [-1.5, 0.5, -1.1], [1.5, 0.5, -1.1]
+ 
+            ];
+ 
+            
+ 
+            wPos.forEach(pos => {
+ 
+                let wheel = new THREE.Mesh(wheelGeo, darkMat);
+ 
+                wheel.position.set(...pos);
+ 
+                // 20% chance a wheel is missing
+ 
+                if(Math.random() > 0.2) carGroup.add(wheel);
+ 
+            });
+ 
+
+ 
+            carGroup.position.set(x, 0, z);
+ 
+            carGroup.rotation.y = rotY;
+ 
+            scene.add(carGroup);
+ 
+            
+ 
+            // Add collision for cars
+ 
+            obstacles.push({x: x, z: z, radius: 2.8});
+ 
+        }
+ 
+
+ 
+        function generateMachine(x, z) {
+ 
+            const mGroup = new THREE.Group();
+ 
+            
+ 
+            // Base
+ 
+            const baseMat = new THREE.MeshStandardMaterial({color: 0x333333, metalness: 0.6, roughness: 0.4});
+ 
+            const base = new THREE.Mesh(new THREE.BoxGeometry(3, 2, 3), baseMat);
+ 
+            base.position.y = 1;
+ 
+            base.castShadow = true;
+ 
+            mGroup.add(base);
+ 
+
+ 
+            // Glowing Core / Antenna
+ 
+            const coreMat = new THREE.MeshStandardMaterial({color: 0x550000, emissive: 0x330000});
+ 
+            const core = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.8, 3, 16), coreMat);
+ 
+            core.position.y = 3.5;
+ 
+            core.castShadow = true;
+ 
+            mGroup.add(core);
+ 
+            
+ 
+            // Energy Rings
+ 
+            const ringGeo = new THREE.TorusGeometry(1.2, 0.1, 8, 16);
+ 
+            const ringMat = new THREE.MeshStandardMaterial({color: 0x222222});
+ 
+            for(let i=0; i
+												<3; i++) {
+ 
+                let ring = new THREE.Mesh(ringGeo, ringMat);
+ 
+                ring.position.y = 2.5 + i*1.0;
+ 
+                ring.rotation.x = Math.PI / 2;
+ 
+                mGroup.add(ring);
+ 
+            }
+ 
+
+ 
+            mGroup.position.set(x, 0, z);
+ 
+            
+ 
+            // Store specific parts we want to change color later
+ 
+            mGroup.userData = { repaired: false, progress: 0, coreMesh: core }; 
+ 
+            scene.add(mGroup);
+ 
+            machines.push(mGroup);
+ 
+            obstacles.push({x: x, z: z, radius: 2.5});
+ 
+        }
+ 
+
+ 
+        function buildEnvironment() {
+ 
+            // Procedural Grass Instances (Performance optimized)
+ 
+            const grassCount = 10000;
+ 
+            const grassGeo = new THREE.ConeGeometry(0.1, 0.6, 3);
+ 
+            const grassMat = new THREE.MeshStandardMaterial({color: 0x4caf50});
+ 
+            const grassMesh = new THREE.InstancedMesh(grassGeo, grassMat, grassCount);
+ 
+            
+ 
+            const dummy = new THREE.Object3D();
+ 
+            for(let i=0; i
+													<grassCount; i++) {
+ 
+                dummy.position.set((Math.random() - 0.5) * MAP_SIZE, 0.3, (Math.random() - 0.5) * MAP_SIZE);
+ 
+                dummy.rotation.y = Math.random() * Math.PI;
+ 
+                dummy.rotation.x = (Math.random() - 0.5) * 0.2;
+ 
+                dummy.updateMatrix();
+ 
+                grassMesh.setMatrixAt(i, dummy.matrix);
+ 
+            }
+ 
+            scene.add(grassMesh);
+ 
+
+ 
+            // Distribute Procedural Detailed Buildings
+ 
+            for(let i=0; i
+														<20; i++) {
+ 
+                let x = (Math.random()-0.5)* (MAP_SIZE - 25);
+ 
+                let z = (Math.random()-0.5)* (MAP_SIZE - 25);
+ 
+                // Clear center
+ 
+                if(Math.sqrt(x*x + z*z) < 15) continue; 
+ 
+                generateDetailedBuilding(x, z);
+ 
+            }
+ 
+
+ 
+            // Replace plain boundary walls with a perimeter of broken cars
+ 
+            for (let i = -60; i <= 60; i += 7) {
+ 
+                // Top and Bottom edges
+ 
+                generateBrokenCar(i, -60, Math.random() * 0.5);
+ 
+                generateBrokenCar(i, 60, Math.random() * 0.5 + Math.PI);
+ 
+                
+ 
+                // Left and Right edges
+ 
+                if (i > -60 && i < 60) {
+ 
+                    generateBrokenCar(-60, i, Math.random() * 0.5 + Math.PI/2);
+ 
+                    generateBrokenCar(60, i, Math.random() * 0.5 - Math.PI/2);
+ 
+                }
+ 
+            }
+ 
+
+ 
+            // 8 Generators
+ 
+            for(let i=0; i
+															<totalMachines; i++) {
+ 
+                let placed = false;
+ 
+                while(!placed) {
+ 
+                    let x = (Math.random() - 0.5) * (MAP_SIZE - 15);
+ 
+                    let z = (Math.random() - 0.5) * (MAP_SIZE - 15);
+ 
+                    if(Math.sqrt(x*x + z*z) > 12 && !checkCollisionRaw(x, z, 4)) {
+ 
+                        generateMachine(x, z);
+ 
+                        placed = true;
+ 
+                    }
+ 
+                }
+ 
+            }
+ 
+
+ 
+            createCrab();
+ 
+        }
+ 
+
+ 
+        function createCrab() {
+ 
+            theGiantCrab = new THREE.Group();
+ 
+            
+ 
+            const shellMat = new THREE.MeshStandardMaterial({color: 0x2a0800, roughness: 0.2, metalness: 0.8, emissive: 0x110000});
+ 
+            const body = new THREE.Mesh(new THREE.BoxGeometry(8, 4.5, 7), shellMat);
+ 
+            body.position.y = 4.5;
+ 
+            body.castShadow = true;
+ 
+            theGiantCrab.add(body);
+ 
+
+ 
+            const eyeMat = new THREE.MeshStandardMaterial({color: 0x000000, roughness: 0.1, emissive: 0xff3300});
+ 
+            let eyeL = new THREE.Mesh(new THREE.SphereGeometry(0.8, 16, 16), eyeMat); eyeL.position.set(-2, 6, -3.5);
+ 
+            let eyeR = new THREE.Mesh(new THREE.SphereGeometry(0.8, 16, 16), eyeMat); eyeR.position.set(2, 6, -3.5);
+ 
+            theGiantCrab.add(eyeL); theGiantCrab.add(eyeR);
+ 
+
+ 
+            theGiantCrab.userData.legs = [];
+ 
+            const legGeo = new THREE.CylinderGeometry(0.5, 0.15, 8);
+ 
+            for(let i=0; i
+																<8; i++) {
+ 
+                let leg = new THREE.Mesh(legGeo, shellMat);
+ 
+                let isLeft = i < 4;
+ 
+                let zPos = (i%4)*2.2 - 3.5;
+ 
+                leg.position.set(isLeft ? -4.5 : 4.5, 2.5, zPos);
+ 
+                leg.rotation.z = isLeft ? Math.PI/4 : -Math.PI/4;
+ 
+                theGiantCrab.add(leg);
+ 
+                theGiantCrab.userData.legs.push(leg);
+ 
+            }
+ 
+
+ 
+            // Scale crab down by 25% (0.75 multiplier)
+ 
+            theGiantCrab.scale.set(0.75, 0.75, 0.75);
+ 
+
+ 
+            theGiantCrab.position.set(0, 0, -45); 
+ 
+            
+ 
+            theGiantCrab.userData.target = new THREE.Vector3();
+ 
+            theGiantCrab.userData.changeTargetTime = 0;
+ 
+            theGiantCrab.userData.speed = 5.0; // Base Speed
+ 
+            theGiantCrab.userData.priorityTarget = null; 
+ 
+
+ 
+            scene.add(theGiantCrab);
+ 
+        }
+ 
+
+ 
+        function createAxe() {
+ 
+            axeItem = new THREE.Group();
+ 
+            const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 3), new THREE.MeshStandardMaterial({color: 0x222222}));
+ 
+            const blade = new THREE.Mesh(new THREE.BoxGeometry(1.5, 1.0, 0.15), new THREE.MeshStandardMaterial({color: 0xff8800, emissive: 0xaa4400}));
+ 
+            blade.position.set(0.6, 1.0, 0);
+ 
+            axeItem.add(handle); axeItem.add(blade);
+ 
+            const aura = new THREE.PointLight(0xff8800, 4, 20); axeItem.add(aura);
+ 
+
+ 
+            axeItem.position.set(0, 2.0, 0);
+ 
+            scene.add(axeItem);
+ 
+            showNotification("ARMORY ONLINE: PLASMA AXE DEPLOYED AT CENTER!");
+ 
+        }
+ 
+
+ 
+        function checkCollisionRaw(nx, nz, radius) {
+ 
+            // Check against outer limit to prevent walking through the car perimeter
+ 
+            if(nx > MAP_BOUND || nx < -MAP_BOUND || nz > MAP_BOUND || nz < -MAP_BOUND) return true;
+ 
+            
+ 
+            for(let o of obstacles) {
+ 
+                let dx = nx - o.x; let dz = nz - o.z;
+ 
+                if(Math.sqrt(dx*dx + dz*dz) < (radius + o.radius)) return true;
+ 
+            }
+ 
+            return false;
+ 
+        }
+ 
+
+ 
+        function showNotification(msg) {
+ 
+            notifEl.innerText = msg;
+ 
+            notifEl.style.opacity = 1;
+ 
+            setTimeout(() => { notifEl.style.opacity = 0; }, 5000);
+ 
+        }
+ 
+
+ 
+        // --- INPUT HANDLING ---
+ 
+        function onMouseMove(event) {
+ 
+            if (!isLocked) return;
+ 
+            yawObj.rotation.y -= event.movementX * 0.002;
+ 
+            pitchObj.rotation.x -= event.movementY * 0.002;
+ 
+            pitchObj.rotation.x = Math.max(-Math.PI/2 + 0.1, Math.min(Math.PI/2 - 0.1, pitchObj.rotation.x));
+ 
+        }
+ 
+
+ 
+        function onKeyDown(event) {
+ 
+            switch (event.code) {
+ 
+                case 'ArrowUp': case 'KeyW': moveForward = true; break;
+ 
+                case 'ArrowLeft': case 'KeyA': moveLeft = true; break;
+ 
+                case 'ArrowDown': case 'KeyS': moveBackward = true; break;
+ 
+                case 'ArrowRight': case 'KeyD': moveRight = true; break;
+ 
+                case 'Space': if (canJump) velocity.y += 200; canJump = false; break;
+ 
+                case 'KeyE': keyE = true; break; // Holding E to repair
+ 
+            }
+ 
+        }
+ 
+
+ 
+        function onKeyUp(event) {
+ 
+            switch (event.code) {
+ 
+                case 'ArrowUp': case 'KeyW': moveForward = false; break;
+ 
+                case 'ArrowLeft': case 'KeyA': moveLeft = false; break;
+ 
+                case 'ArrowDown': case 'KeyS': moveBackward = false; break;
+ 
+                case 'ArrowRight': case 'KeyD': moveRight = false; break;
+ 
+                case 'KeyE': keyE = false; break; // Release E
+ 
+            }
+ 
+        }
+ 
+
+ 
+        function onMouseDown(event) {
+ 
+            if(event.button === 0 && isLocked && hasAxe && !isAttacking) {
+ 
+                isAttacking = true;
+ 
+                setTimeout(() => { isAttacking = false; }, 450);
+ 
+
+ 
+                if(!crabDead) {
+ 
+                    raycaster.setFromCamera(screenCenter, camera);
+ 
+                    const intersects = raycaster.intersectObject(theGiantCrab, true);
+ 
+                    let distToCrab = yawObj.position.distanceTo(theGiantCrab.position);
+ 
+
+ 
+                    if ((intersects.length > 0 && distToCrab < 30) || distToCrab < 10) {
+ 
+                        theGiantCrab.children.forEach(c => {
+ 
+                            if(c.material) c.material.emissive = new THREE.Color(0xff8800);
+ 
+                        });
+ 
+                        setTimeout(() => { dieCrab(); }, 150);
+ 
+                    }
+ 
+                }
+ 
+            }
+ 
+        }
+ 
+
+ 
+        function dieCrab() {
+ 
+            crabDead = true;
+ 
+            bossUI.style.display = 'none';
+ 
+            setTimeout(() => {
+ 
+                document.exitPointerLock();
+ 
+                document.getElementById('win-screen').style.display = 'flex';
+ 
+            }, 800);
+ 
+        }
+ 
+
+ 
+        function diePlayer() {
+ 
+            document.exitPointerLock();
+ 
+            document.getElementById('death-screen').style.display = 'flex';
+ 
+        }
+ 
+
+ 
+        function onWindowResize() {
+ 
+            camera.aspect = window.innerWidth / window.innerHeight;
+ 
+            camera.updateProjectionMatrix();
+ 
+            renderer.setSize(window.innerWidth, window.innerHeight);
+ 
+        }
+ 
+
+ 
+        function animate() {
+ 
+            requestAnimationFrame(animate);
+ 
+            const time = performance.now();
+ 
+            const delta = (time - prevTime) / 1000;
+ 
+            prevTime = time;
+ 
+
+ 
+            if (isLocked) {
+ 
+                // --- PLAYER MOVEMENT ---
+ 
+                velocity.x -= velocity.x * 10.0 * delta;
+ 
+                velocity.z -= velocity.z * 10.0 * delta;
+ 
+                velocity.y -= 9.8 * 60.0 * delta; 
+ 
+
+ 
+                direction.z = Number(moveBackward) - Number(moveForward); 
+ 
+                direction.x = Number(moveRight) - Number(moveLeft);
+ 
+                direction.normalize();
+ 
+
+ 
+                const speed = 250.0 * delta;
+ 
+                if (moveForward || moveBackward) velocity.z += direction.z * speed;
+ 
+                if (moveLeft || moveRight) velocity.x += direction.x * speed;
+ 
+
+ 
+                let oldX = yawObj.position.x;
+ 
+                let oldZ = yawObj.position.z;
+ 
+
+ 
+                yawObj.translateX(velocity.x * delta);
+ 
+                if (checkCollisionRaw(yawObj.position.x, yawObj.position.z, 1.2)) yawObj.position.x = oldX; 
+ 
+
+ 
+                yawObj.translateZ(velocity.z * delta);
+ 
+                if (checkCollisionRaw(yawObj.position.x, yawObj.position.z, 1.2)) yawObj.position.z = oldZ;
+ 
+                
+ 
+                yawObj.position.y += (velocity.y * delta);
+ 
+                if (yawObj.position.y < 1.5) { velocity.y = 0; yawObj.position.y = 1.5; canJump = true; }
+ 
+
+ 
+                // --- PLAYER ANIMATION ---
+ 
+                isMoving = (Math.abs(velocity.x) > 2 || Math.abs(velocity.z) > 2);
+ 
+                if (isMoving) {
+ 
+                    let walkSpeed = time * 0.015;
+ 
+                    playerLegL.rotation.x = Math.sin(walkSpeed) * 0.8;
+ 
+                    playerLegR.rotation.x = -Math.sin(walkSpeed) * 0.8;
+ 
+                    if(!isAttacking) {
+ 
+                        playerArmL.rotation.x = -Math.sin(walkSpeed) * 0.6;
+ 
+                        playerArmR.rotation.x = Math.sin(walkSpeed) * 0.6;
+ 
+                    }
+ 
+                } else {
+ 
+                    playerLegL.rotation.x = 0; playerLegR.rotation.x = 0;
+ 
+                    if(!isAttacking) { playerArmL.rotation.x = 0; playerArmR.rotation.x = 0; }
+ 
+                }
+ 
+
+ 
+                if (isAttacking) playerArmR.rotation.x = -Math.PI / 1.5; 
+ 
+                
+ 
+                // If interacting, raise arm to panel
+ 
+                if(keyE && !isAttacking) {
+ 
+                    playerArmR.rotation.x = -Math.PI / 3;
+ 
+                }
+ 
+
+ 
+                // --- HOLD TO REPAIR MECHANIC ---
+ 
+                let pPos = yawObj.position;
+ 
+                let nearestMachine = null;
+ 
+
+ 
+                for(let m of machines) {
+ 
+                    if(!m.userData.repaired && pPos.distanceTo(m.position) < 8) {
+ 
+                        nearestMachine = m; break;
+ 
+                    }
+ 
+                }
+ 
+
+ 
+                if (nearestMachine) {
+ 
+                    promptEl.style.display = 'block';
+ 
+                    
+ 
+                    if (keyE) {
+ 
+                        // Takes about 3.5 seconds to repair
+ 
+                        nearestMachine.userData.progress += delta * 28; 
+ 
+                        
+ 
+                        repairContainer.style.display = 'block';
+ 
+                        repairBar.style.width = Math.min(nearestMachine.userData.progress, 100) + '%';
+ 
+                        promptEl.innerText = `Repairing... ${Math.floor(nearestMachine.userData.progress)}%`;
+ 
+
+ 
+                        if (nearestMachine.userData.progress >= 100) {
+ 
+                            // Completed Repair!
+ 
+                            nearestMachine.userData.repaired = true;
+ 
+                            nearestMachine.userData.coreMesh.material.color.setHex(0x00ffaa);
+ 
+                            nearestMachine.userData.coreMesh.material.emissive.setHex(0x008855);
+ 
+                            
+ 
+                            machinesRepaired++;
+ 
+                            countEl.innerText = machinesRepaired;
+ 
+
+ 
+                            // Boss AI Triggers
+ 
+                            theGiantCrab.userData.priorityTarget = nearestMachine.position.clone();
+ 
+                            theGiantCrab.userData.speed *= 1.025; // Speed boost
+ 
+
+ 
+                            repairContainer.style.display = 'none';
+ 
+                            
+ 
+                            if(machinesRepaired === totalMachines) {
+ 
+                                createAxe();
+ 
+                            } else {
+ 
+                                showNotification("GENERATOR ONLINE. ARCHON ENERGY REROUTED.");
+ 
+                            }
+ 
+                        }
+ 
+                    } else {
+ 
+                        // Slowly lose progress if you let go!
+ 
+                        if(nearestMachine.userData.progress > 0) nearestMachine.userData.progress -= delta * 15;
+ 
+                        if(nearestMachine.userData.progress < 0) nearestMachine.userData.progress = 0;
+ 
+                        
+ 
+                        promptEl.innerText = "Hold [E] to Attach & Repair";
+ 
+                        repairContainer.style.display = nearestMachine.userData.progress > 0 ? 'block' : 'none';
+ 
+                        repairBar.style.width = nearestMachine.userData.progress + '%';
+ 
+                    }
+ 
+                } else {
+ 
+                    promptEl.style.display = 'none';
+ 
+                    repairContainer.style.display = 'none';
+ 
+                }
+ 
+
+ 
+                // Collecting Axe
+ 
+                if (axeItem && !hasAxe) {
+ 
+                    axeItem.rotation.y += delta * 2; 
+ 
+                    if (pPos.distanceTo(axeItem.position) < 5) {
+ 
+                        hasAxe = true;
+ 
+                        scene.remove(axeItem);
+ 
+                        
+ 
+                        const heldAxe = new THREE.Group();
+ 
+                        const h = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 1.8), new THREE.MeshStandardMaterial({color: 0x222222}));
+ 
+                        const b = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.6, 0.1), new THREE.MeshStandardMaterial({color: 0xff8800, emissive: 0xaa4400}));
+ 
+                        b.position.set(0.4, 0.6, 0);
+ 
+                        heldAxe.add(h); heldAxe.add(b);
+ 
+                        
+ 
+                        heldAxe.position.set(0, -1.0, 0.4); 
+ 
+                        heldAxe.rotation.x = Math.PI/2;
+ 
+                        playerArmR.add(heldAxe);
+ 
+
+ 
+                        weaponStatEl.innerText = "WEAPON: PLASMA AXE";
+ 
+                        weaponStatEl.style.color = "#ff8800";
+ 
+                        showNotification("WEAPON ACQUIRED. FIND AND EXECUTE TARGET.");
+ 
+                        bossUI.style.display = 'block'; 
+ 
+                    }
+ 
+                }
+ 
+
+ 
+                // --- CRAB AI LOGIC ---
+ 
+                if (!crabDead) {
+ 
+                    let distToPlayer = theGiantCrab.position.distanceTo(pPos);
+ 
+
+ 
+                    // Reduced kill range slightly since crab is 25% smaller
+ 
+                    if (distToPlayer < 3.0) diePlayer();
+ 
+
+ 
+                    let activeTarget = null;
+ 
+                    if (theGiantCrab.userData.priorityTarget) {
+ 
+                        activeTarget = theGiantCrab.userData.priorityTarget;
+ 
+                        if (theGiantCrab.position.distanceTo(activeTarget) < 4.0) {
+ 
+                            theGiantCrab.userData.priorityTarget = null; 
+ 
+                        }
+ 
+                    }
+ 
+
+ 
+                    if (!activeTarget) {
+ 
+                        if (time > theGiantCrab.userData.changeTargetTime) {
+ 
+                            theGiantCrab.userData.target.set(
+ 
+                                theGiantCrab.position.x + (Math.random() - 0.5) * 50,
+ 
+                                0,
+ 
+                                theGiantCrab.position.z + (Math.random() - 0.5) * 50
+ 
+                            );
+ 
+                            theGiantCrab.userData.changeTargetTime = time + 3000 + Math.random() * 4000;
+ 
+                        }
+ 
+                        activeTarget = theGiantCrab.userData.target;
+ 
+                    }
+ 
+
+ 
+                    const dx = activeTarget.x - theGiantCrab.position.x;
+ 
+                    const dz = activeTarget.z - theGiantCrab.position.z;
+ 
+                    const distToTarget = Math.sqrt(dx*dx + dz*dz);
+ 
+                    const currentCrabSpeed = theGiantCrab.userData.speed; 
+ 
+
+ 
+                    if (distToTarget > 1.0) {
+ 
+                        theGiantCrab.lookAt(activeTarget.x, theGiantCrab.position.y, activeTarget.z);
+ 
+                        
+ 
+                        let nX = theGiantCrab.position.x + (dx/distToTarget) * currentCrabSpeed * delta; 
+ 
+                        let nZ = theGiantCrab.position.z + (dz/distToTarget) * currentCrabSpeed * delta;
+ 
+                        
+ 
+                        if(nX > -55 && nX < 55 && nZ > -55 && nZ < 55 && !checkCollisionRaw(nX, nZ, 2.5)) {
+ 
+                            theGiantCrab.position.x = nX; 
+ 
+                            theGiantCrab.position.z = nZ;
+ 
+                        } else {
+ 
+                            if (!theGiantCrab.userData.priorityTarget) {
+ 
+                                theGiantCrab.userData.changeTargetTime = 0; 
+ 
+                            }
+ 
+                        }
+ 
+
+ 
+                        let legSpeedAnim = currentCrabSpeed * 0.003;
+ 
+                        for (let i = 0; i < theGiantCrab.userData.legs.length; i++) {
+ 
+                            theGiantCrab.userData.legs[i].rotation.x = Math.sin(time * legSpeedAnim + (i % 2) * Math.PI) * 0.5;
+ 
+                        }
+ 
+                    }
+ 
+                }
+ 
+                
+ 
+                if (crabDead) {
+ 
+                    if (theGiantCrab.rotation.x < Math.PI) {
+ 
+                        theGiantCrab.rotation.x += delta * 4;
+ 
+                        theGiantCrab.position.y -= delta * 3;
+ 
+                        for (let i = 0; i < theGiantCrab.userData.legs.length; i++) {
+ 
+                            theGiantCrab.userData.legs[i].rotation.x = Math.random() * Math.PI;
+ 
+                        }
+ 
+                    }
+ 
+                }
+ 
+            }
+ 
+
+ 
+            renderer.render(scene, camera);
+ 
+        }
+ 
+    
+																</script>
+															</body>
+														</html>
+													</p>
+												</body>
+											</html>
