@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Codebeautify.org Text to HTML Converter</title>
+	</head>
+	<body>
+		<p>
+			<!DOCTYPE html>
+			<html lang="en">
+				<head>
+					<meta charset="UTF-8">
+						<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+							<title>Echoes of Archon - The Hunt</title>
+							<style>
+ 
+        body {
+ 
+            margin: 0; overflow: hidden; background-color: #1a1a2e; 
+ 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+ 
+            color: #fff; user-select: none; touch-action: none;
+ 
+        }
+ 
+
+ 
+        #game-canvas { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; }
+ 
+        
+ 
+        #ui-layer { 
+ 
+            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; 
+ 
+            z-index: 10; pointer-events: none; 
+ 
+            display: flex; flex-direction: column; justify-content: space-between;
+ 
+        }
+ 
+
+ 
+        /* Start Screen / Blocker */
+ 
+        #blocker {
+ 
+            position: absolute; width: 100%; height: 100%;
+ 
+            background-color: rgba(20, 30, 40, 0.9);
+ 
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+ 
+            z-index: 50; pointer-events: auto; backdrop-filter: blur(5px);
+ 
+        }
+ 
+
+ 
+        #blocker h1 { font-size: 4.5rem; margin-bottom: 0; text-shadow: 0 0 15px #00aaff; text-align: center; letter-spacing: 2px;}
+ 
+        #blocker h2 { font-size: 1.8rem; color: #ffaa00; margin-bottom: 20px; font-weight: 300; letter-spacing: 5px;}
+ 
+        #blocker p { font-size: 1.1rem; color: #aaddff; margin-bottom: 30px; text-align: center; max-width: 600px; line-height: 1.6;}
+ 
+        
+ 
+        .controls-text { font-size: 1rem; color: #aaa; background: rgba(0,0,0,0.6); padding: 15px 25px; border-radius: 8px; border: 1px solid #444;}
+ 
+        .controls-text span { color: #00aaff; font-weight: bold; }
+ 
+
+ 
+        .btn { padding: 15px 40px; font-size: 1.2rem; background: #0077cc; color: white; border: 2px solid #00aaff; border-radius: 5px; cursor: pointer; transition: 0.2s; font-weight: bold; margin-top: 25px; letter-spacing: 1px;}
+ 
+        .btn:hover { background: #00aaff; box-shadow: 0 0 20px rgba(0, 170, 255, 0.6); transform: scale(1.05);}
+ 
+
+ 
+        /* HUD */
+ 
+        #top-hud { padding: 20px; font-size: 1.3rem; font-weight: bold; text-shadow: 2px 2px 4px #000; }
+ 
+        #hud-accent { color: #00aaff; font-size: 1.5rem;}
+ 
+        #weapon-status { color: #888; font-size: 1rem; margin-top: 5px; }
+ 
+        
+ 
+        #crosshair {
+ 
+            position: absolute; top: 50%; left: 50%; width: 6px; height: 6px;
+ 
+            background: rgba(255,255,255,0.8); border-radius: 50%;
+ 
+            transform: translate(-50%, -50%); box-shadow: 0 0 5px #000;
+ 
+        }
+ 
+
+ 
+        #prompt {
+ 
+            position: absolute; bottom: 30%; left: 50%; transform: translateX(-50%);
+ 
+            font-size: 1.4rem; font-weight: bold; background: rgba(0,0,0,0.8); color: #fff;
+ 
+            padding: 10px 30px; border-radius: 8px; display: none; border: 1px solid #00aaff; box-shadow: 0 0 15px rgba(0, 170, 255, 0.3);
+ 
+        }
+ 
+
+ 
+        #notification {
+ 
+            position: absolute; top: 100px; left: 50%; transform: translateX(-50%);
+ 
+            font-size: 1.2rem; color: #ffcc00; font-weight: bold; text-shadow: 2px 2px 5px #000;
+ 
+            opacity: 0; transition: opacity 0.3s; text-align: center; background: rgba(0,0,0,0.6); padding: 10px 20px; border-radius: 5px;
+ 
+        }
+ 
+
+ 
+        /* Target UI */
+ 
+        #boss-ui {
+ 
+            position: absolute; top: 20px; right: 20px; display: none;
+ 
+            background: rgba(20,0,0,0.8); padding: 15px 25px; border-radius: 5px; border: 2px solid #aa0000;
+ 
+            animation: pulse-border 2s infinite;
+ 
+        }
+ 
+        #boss-name { font-size: 1.2rem; text-align: center; font-weight: bold; color: #ff5555; letter-spacing: 2px; text-shadow: 1px 1px 2px #000;}
+ 
+        #boss-sub { font-size: 0.9rem; color: #aaa; text-align: center; margin-top: 5px; letter-spacing: 1px;}
+ 
+
+ 
+        @keyframes pulse-border {
+ 
+            0% { box-shadow: 0 0 5px #aa0000; }
+ 
+            50% { box-shadow: 0 0 20px #ff0000; }
+ 
+            100% { box-shadow: 0 0 5px #aa0000; }
+ 
+        }
+ 
+
+ 
+        /* Archive Logs Overlay */
+ 
+        #archive-log {
+ 
+            position: absolute; top: 10%; left: 50%; transform: translateX(-50%);
+ 
+            width: 80%; max-width: 800px; height: 75%; background: rgba(15, 20, 30, 0.95);
+ 
+            border: 2px solid #00aaff; border-radius: 10px; z-index: 60; display: none;
+ 
+            flex-direction: column; padding: 40px; pointer-events: auto; box-shadow: 0 0 40px rgba(0, 170, 255, 0.2);
+ 
+            overflow-y: auto; backdrop-filter: blur(10px);
+ 
+        }
+ 
+        #archive-log h2 { color: #00aaff; margin-top: 0; border-bottom: 1px solid #334; padding-bottom: 15px; font-size: 2rem; letter-spacing: 2px;}
+ 
+        .log-entry { margin-bottom: 30px; border-left: 4px solid #0077cc; padding-left: 20px; background: rgba(0,0,0,0.3); padding-top: 15px; padding-bottom: 15px; border-radius: 0 5px 5px 0;}
+ 
+        .log-date { color: #00aaff; font-size: 0.9rem; margin-bottom: 8px; font-weight: bold; text-transform: uppercase;}
+ 
+        .log-text { color: #ddd; font-size: 1.15rem; line-height: 1.6; }
+ 
+        .close-log-btn { background: #223; color: white; border: 1px solid #556; padding: 12px 25px; cursor: pointer; border-radius: 5px; align-self: center; font-size: 1.1rem; margin-top: 20px; transition: 0.2s;}
+ 
+        .close-log-btn:hover { background: #334; border-color: #00aaff; color: #00aaff;}
+ 
+
+ 
+        /* End Screens */
+ 
+        .end-screen {
+ 
+            position: absolute; width: 100%; height: 100%; top: 0; left: 0;
+ 
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+ 
+            z-index: 70; pointer-events: auto;
+ 
+        }
+ 
+        #win-screen { background-color: rgba(10, 30, 20, 0.95); }
+ 
+        #death-screen { background-color: rgba(40, 10, 10, 0.95); }
+ 
+        .ending-title { font-size: 5rem; margin-bottom: 15px; text-shadow: 0 0 30px #000; letter-spacing: 5px; text-align: center;}
+ 
+        
+ 
+        .lore-box {
+ 
+            max-width: 700px; background: rgba(0,0,0,0.6); padding: 25px; 
+ 
+            border-left: 4px solid #55ff55; margin-bottom: 40px;
+ 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); border-radius: 0 8px 8px 0;
+ 
+        }
+ 
+        .lore-box p { font-size: 1.25rem; color: #eee; line-height: 1.6; margin: 0; }
+ 
+
+ 
+    </style>
+						</head>
+						<body>
+							<div id="ui-layer">
+								<div id="top-hud">
+ 
+            MACHINES REPAIRED: 
+									<span id="machine-count" id="hud-accent">0</span> / 8
+									<br>
+										<div id="weapon-status">WEAPON: UNARMED</div>
+									</div>
+									<div id="crosshair"></div>
+									<div id="prompt">Press [E] to Repair</div>
+									<div id="notification"></div>
+									<div id="boss-ui">
+										<div id="boss-name">THREAT DETECTED: SUBJECT 89</div>
+										<div id="boss-sub">FIND AND EXECUTE TARGET</div>
+									</div>
+								</div>
+								<!-- Main Menu -->
+								<div id="blocker">
+									<h1>ECHOES OF ARCHON</h1>
+									<h2>THE HUNT</h2>
+									<p>The facility has been breached. The Archon energy network is failing in Sector 4.
+										<br>Repair the 8 remaining localized generators to power up the armory.
+										</p>
+										<div class="controls-text">
+											<span>WASD</span> Move &nbsp;|&nbsp; 
+											<span>SPACE</span> Jump &nbsp;|&nbsp; 
+											<span>E</span> Interact &nbsp;|&nbsp; 
+											<span>L</span> Archive Logs &nbsp;|&nbsp; 
+											<span>Left Click</span> Attack
+ 
+        
+										</div>
+										<button class="btn" id="start-btn">INITIALIZE SIMULATION</button>
+									</div>
+									<!-- Archive Logs Overlay -->
+									<div id="archive-log">
+										<h2>FACILITY DATA ARCHIVE</h2>
+										<div class="log-entry">
+											<div class="log-date">Log #042 - Dr. Aris (Research Lead)</div>
+											<div class="log-text">We brought it up from the deep trench. We call it Subject 89. Its carapace completely deflects our standard kinetic munitions. We've had to isolate it in the sub-levels of Sector 4 until we can find a vulnerability.</div>
+										</div>
+										<div class="log-entry">
+											<div class="log-date">Log #089 - Security Chief Vance</div>
+											<div class="log-text">The containment field failed! It's loose in the main hub. It crushed three of my heavy security details in minutes. Our only hope is the Prototype Energy Axe stored in the central vault, but the localized power grid is offline. We are sitting ducks.</div>
+										</div>
+										<div class="log-entry">
+											<div class="log-date">Log #091 - Automated System Alert</div>
+											<div class="log-text">WARNING: To bypass the central vault lockdown, a minimum of 8 localized generators must be manually rebooted. Entity #89 detected in the generator sector. Survival probability: 4.2%. Godspeed.</div>
+										</div>
+										<button class="close-log-btn" onclick="toggleLogs()">[ CLOSE ARCHIVE ]</button>
+									</div>
+									<!-- Victory Screen with Lore Conclusion -->
+									<div id="win-screen" class="end-screen">
+										<h1 class="ending-title" style="color: #55ff55;">TARGET EXECUTED</h1>
+										<div class="lore-box">
+											<p>
+												<b>LOG UPDATE #092:</b>
+												<br>
+													<br>
+ 
+                With a single, devastating strike, the Prototype Axe's energy edge cleanly severed the entity's central nerve cluster. The impenetrable carapace shattered like glass. 
+														<br>
+															<br>
+ 
+                Subject 89 is dead. The localized Archon energy grid has stabilized. Sector 4 is silent once more. You have survived the hunt... for now.
+ 
+            
+															</p>
+														</div>
+														<button class="btn" onclick="location.reload()">CONCLUDE SIMULATION</button>
+													</div>
+													<!-- Defeat Screen -->
+													<div id="death-screen" class="end-screen">
+														<h1 class="ending-title" style="color: #ff3333;">SYSTEM FAILURE</h1>
+														<p style="font-size: 1.8rem; color: #ddd; margin-bottom: 40px;">Subject 89 remains active. You have been consumed.</p>
+														<button class="btn" onclick="location.reload()">RETRY SIMULATION</button>
+													</div>
+													<!-- Scripts -->
+													<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+													<script>
+ 
+        // --- GAME STATE ---
+ 
+        let scene, camera, renderer;
+ 
+        let prevTime = performance.now();
+ 
+        
+ 
+        // Raycaster for Execution tap
+ 
+        const raycaster = new THREE.Raycaster();
+ 
+        const screenCenter = new THREE.Vector2(0, 0);
+ 
+
+ 
+        // Custom TPS Controls
+ 
+        let isLocked = false;
+ 
+        let yawObj = new THREE.Group();   // Handles Left/Right rotation & X/Z position
+ 
+        let pitchObj = new THREE.Group(); // Handles Up/Down camera angle
+ 
+        
+ 
+        let velocity = new THREE.Vector3();
+ 
+        let direction = new THREE.Vector3();
+ 
+        let moveForward = false, moveBackward = false, moveLeft = false, moveRight = false, canJump = false;
+ 
+        
+ 
+        // Player Model
+ 
+        let playerGroup, playerArmL, playerArmR, playerLegL, playerLegR;
+ 
+        let isMoving = false;
+ 
+        let isAttacking = false;
+ 
+
+ 
+        // Game Logic Variables (Reduced Map size bounds: -45 to 45)
+ 
+        const MAP_SIZE = 90;
+ 
+        const MAP_BOUND = 45;
+ 
+        
+ 
+        let machines = [];
+ 
+        let obstacles = []; 
+ 
+        let machinesRepaired = 0;
+ 
+        let totalMachines = 8; 
+ 
+        let axeItem = null;
+ 
+        let hasAxe = false;
+ 
+        let logsOpen = false;
+ 
+        
+ 
+        // Crab Boss
+ 
+        let theGiantCrab;
+ 
+        let crabDead = false;
+ 
+        let crabAwake = false;
+ 
+
+ 
+        // UI Elements
+ 
+        const promptEl = document.getElementById('prompt');
+ 
+        const countEl = document.getElementById('machine-count');
+ 
+        const notifEl = document.getElementById('notification');
+ 
+        const weaponStatEl = document.getElementById('weapon-status');
+ 
+        const bossUI = document.getElementById('boss-ui');
+ 
+        const archiveLogUI = document.getElementById('archive-log');
+ 
+
+ 
+        init();
+ 
+        animate();
+ 
+
+ 
+        function init() {
+ 
+            // Scene & Renderer Setup
+ 
+            scene = new THREE.Scene();
+ 
+            scene.background = new THREE.Color(0x1a1a2e);
+ 
+            scene.fog = new THREE.FogExp2(0x1a1a2e, 0.035); // Dense fog for smaller map
+ 
+
+ 
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+ 
+            renderer.setSize(window.innerWidth, window.innerHeight);
+ 
+            renderer.shadowMap.enabled = true;
+ 
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+ 
+            document.body.appendChild(renderer.domElement);
+ 
+
+ 
+            // Lighting
+ 
+            const ambient = new THREE.AmbientLight(0x223344, 1.5);
+ 
+            scene.add(ambient);
+ 
+            const dirLight = new THREE.DirectionalLight(0x77aaff, 1.2);
+ 
+            dirLight.position.set(-20, 40, -20);
+ 
+            dirLight.castShadow = true;
+ 
+            dirLight.shadow.camera.left = -50; dirLight.shadow.camera.right = 50;
+ 
+            dirLight.shadow.camera.top = 50; dirLight.shadow.camera.bottom = -50;
+ 
+            scene.add(dirLight);
+ 
+
+ 
+            // Floor
+ 
+            const floorGeo = new THREE.PlaneGeometry(MAP_SIZE, MAP_SIZE);
+ 
+            const floorMat = new THREE.MeshStandardMaterial({ color: 0x2a2a3e, roughness: 0.9 });
+ 
+            const floor = new THREE.Mesh(floorGeo, floorMat);
+ 
+            floor.rotation.x = -Math.PI / 2;
+ 
+            floor.receiveShadow = true;
+ 
+            scene.add(floor);
+ 
+
+ 
+            // --- REBUILT THIRD PERSON RIG ---
+ 
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+ 
+            
+ 
+            // YawObj is the root of the player. It moves through the world and rotates left/right.
+ 
+            scene.add(yawObj);
+ 
+            yawObj.position.y = 1.5;
+ 
+            
+ 
+            // PitchObj holds the camera and rotates up/down.
+ 
+            yawObj.add(pitchObj);
+ 
+            
+ 
+            // Camera sits behind the player, looking slightly down
+ 
+            camera.position.set(0, 2.5, 7.5); 
+ 
+            pitchObj.rotation.x = -0.15; 
+ 
+            pitchObj.add(camera);
+ 
+
+ 
+            // --- PLAYER MODEL ---
+ 
+            // Attached to YawObj, so it rotates with mouse horizontally, but doesn't pitch up/down.
+ 
+            playerGroup = new THREE.Group();
+ 
+            
+ 
+            const suitMat = new THREE.MeshStandardMaterial({ color: 0x2980b9, roughness: 0.6 });
+ 
+            const skinMat = new THREE.MeshStandardMaterial({ color: 0xf1c27d });
+ 
+            const detailMat = new THREE.MeshStandardMaterial({ color: 0x111111 });
+ 
+
+ 
+            // Torso
+ 
+            let body = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1.6, 0.7), suitMat);
+ 
+            body.position.y = 0.8;
+ 
+            body.castShadow = true;
+ 
+            playerGroup.add(body);
+ 
+
+ 
+            // Head
+ 
+            let head = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.8, 0.8), skinMat);
+ 
+            head.position.y = 2.0;
+ 
+            head.castShadow = true;
+ 
+            playerGroup.add(head);
+ 
+            
+ 
+            // Visor (Facing -Z)
+ 
+            let visor = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.25, 0.1), detailMat);
+ 
+            visor.position.set(0, 2.05, -0.41); 
+ 
+            playerGroup.add(visor);
+ 
+
+ 
+            // Limbs
+ 
+            playerArmL = new THREE.Mesh(new THREE.BoxGeometry(0.35, 1.4, 0.35), suitMat);
+ 
+            playerArmL.position.set(-0.85, 1.3, 0);
+ 
+            playerArmL.castShadow = true;
+ 
+            playerGroup.add(playerArmL);
+ 
+
+ 
+            playerArmR = new THREE.Mesh(new THREE.BoxGeometry(0.35, 1.4, 0.35), suitMat);
+ 
+            playerArmR.position.set(0.85, 1.3, 0);
+ 
+            playerArmR.castShadow = true;
+ 
+            playerGroup.add(playerArmR);
+ 
+
+ 
+            playerLegL = new THREE.Mesh(new THREE.BoxGeometry(0.45, 1.4, 0.45), detailMat);
+ 
+            playerLegL.position.set(-0.3, -0.7, 0);
+ 
+            playerLegL.castShadow = true;
+ 
+            playerGroup.add(playerLegL);
+ 
+
+ 
+            playerLegR = new THREE.Mesh(new THREE.BoxGeometry(0.45, 1.4, 0.45), detailMat);
+ 
+            playerLegR.position.set(0.3, -0.7, 0);
+ 
+            playerLegR.castShadow = true;
+ 
+            playerGroup.add(playerLegR);
+ 
+
+ 
+            yawObj.add(playerGroup); 
+ 
+
+ 
+            // Build Level
+ 
+            buildEnvironment();
+ 
+
+ 
+            // Event Listeners
+ 
+            window.addEventListener('resize', onWindowResize);
+ 
+            document.addEventListener('keydown', onKeyDown);
+ 
+            document.addEventListener('keyup', onKeyUp);
+ 
+            document.addEventListener('mousedown', onMouseDown);
+ 
+            document.addEventListener('mousemove', onMouseMove);
+ 
+
+ 
+            // Pointer Lock Setup
+ 
+            const blocker = document.getElementById('blocker');
+ 
+            const startBtn = document.getElementById('start-btn');
+ 
+            
+ 
+            startBtn.addEventListener('click', () => {
+ 
+                document.body.requestPointerLock();
+ 
+            });
+ 
+
+ 
+            document.addEventListener('pointerlockchange', () => {
+ 
+                isLocked = document.pointerLockElement === document.body;
+ 
+                if (!isLocked && !crabDead && !logsOpen) {
+ 
+                    blocker.style.display = 'flex';
+ 
+                } else {
+ 
+                    blocker.style.display = 'none';
+ 
+                }
+ 
+            });
+ 
+        }
+ 
+
+ 
+        function buildEnvironment() {
+ 
+            // Pillars / Obstacles
+ 
+            const pGeo = new THREE.BoxGeometry(4, 20, 4);
+ 
+            const pMat = new THREE.MeshStandardMaterial({color: 0x334455, roughness: 0.9});
+ 
+            
+ 
+            // Scatter obstacles within the smaller 90x90 map (-45 to 45 bounds)
+ 
+            for(let i=0; i
+														<25; i++) {
+ 
+                let p = new THREE.Mesh(pGeo, pMat);
+ 
+                p.position.set((Math.random()-0.5)*80, 10, (Math.random()-0.5)*80);
+ 
+                
+ 
+                // Clear center
+ 
+                if(p.position.length() < 12) continue; 
+ 
+                
+ 
+                p.castShadow = true; p.receiveShadow = true;
+ 
+                scene.add(p);
+ 
+                obstacles.push({x: p.position.x, z: p.position.z, radius: 2.5});
+ 
+            }
+ 
+
+ 
+            // Boundary Walls
+ 
+            const wallGeo = new THREE.BoxGeometry(MAP_SIZE, 20, 2);
+ 
+            const wallMat = new THREE.MeshStandardMaterial({color: 0x111122});
+ 
+            
+ 
+            const walls = [
+ 
+                {x: 0, z: -MAP_BOUND, rotY: 0}, {x: 0, z: MAP_BOUND, rotY: 0},
+ 
+                {x: -MAP_BOUND, z: 0, rotY: Math.PI/2}, {x: MAP_BOUND, z: 0, rotY: Math.PI/2}
+ 
+            ];
+ 
+            walls.forEach(w => {
+ 
+                let mesh = new THREE.Mesh(wallGeo, wallMat);
+ 
+                mesh.position.set(w.x, 10, w.z);
+ 
+                mesh.rotation.y = w.rotY;
+ 
+                scene.add(mesh);
+ 
+            });
+ 
+
+ 
+            // 8 Broken Machines
+ 
+            const machGeo = new THREE.CylinderGeometry(1.5, 1.5, 3, 8);
+ 
+            const machMatBroken = new THREE.MeshStandardMaterial({color: 0x992222, emissive: 0x330000});
+ 
+            
+ 
+            for(let i=0; i
+															<totalMachines; i++) {
+ 
+                let mach = new THREE.Mesh(machGeo, machMatBroken.clone());
+ 
+                
+ 
+                let placed = false;
+ 
+                while(!placed) {
+ 
+                    // Spawn within -40 to 40
+ 
+                    mach.position.set((Math.random() - 0.5) * 80, 1.5, (Math.random() - 0.5) * 80);
+ 
+                    // Check against spawn and other obstacles
+ 
+                    if(mach.position.length() > 10 && !checkCollisionRaw(mach.position.x, mach.position.z, 3)) {
+ 
+                        placed = true;
+ 
+                    }
+ 
+                }
+ 
+                
+ 
+                mach.userData = { repaired: false };
+ 
+                mach.castShadow = true;
+ 
+                scene.add(mach);
+ 
+                machines.push(mach);
+ 
+                obstacles.push({x: mach.position.x, z: mach.position.z, radius: 2.0});
+ 
+            }
+ 
+
+ 
+            createCrab();
+ 
+        }
+ 
+
+ 
+        function createCrab() {
+ 
+            theGiantCrab = new THREE.Group();
+ 
+            
+ 
+            // Add subtle glow to crab shell for visibility in fog
+ 
+            const shellMat = new THREE.MeshStandardMaterial({color: 0x881111, roughness: 0.3, emissive: 0x220000});
+ 
+            const body = new THREE.Mesh(new THREE.BoxGeometry(7, 4, 6), shellMat);
+ 
+            body.position.y = 4;
+ 
+            body.castShadow = true;
+ 
+            theGiantCrab.add(body);
+ 
+
+ 
+            const eyeMat = new THREE.MeshStandardMaterial({color: 0x000000, roughness: 0.1, emissive: 0xaa0000});
+ 
+            let eyeL = new THREE.Mesh(new THREE.SphereGeometry(0.7, 16, 16), eyeMat); eyeL.position.set(-1.5, 5.5, -3);
+ 
+            let eyeR = new THREE.Mesh(new THREE.SphereGeometry(0.7, 16, 16), eyeMat); eyeR.position.set(1.5, 5.5, -3);
+ 
+            theGiantCrab.add(eyeL); theGiantCrab.add(eyeR);
+ 
+
+ 
+            theGiantCrab.userData.legs = [];
+ 
+            const legGeo = new THREE.CylinderGeometry(0.4, 0.1, 7);
+ 
+            for(let i=0; i
+																<8; i++) {
+ 
+                let leg = new THREE.Mesh(legGeo, shellMat);
+ 
+                let isLeft = i < 4;
+ 
+                let zPos = (i%4)*2 - 3;
+ 
+                leg.position.set(isLeft ? -4 : 4, 2, zPos);
+ 
+                leg.rotation.z = isLeft ? Math.PI/4 : -Math.PI/4;
+ 
+                theGiantCrab.add(leg);
+ 
+                theGiantCrab.userData.legs.push(leg);
+ 
+            }
+ 
+
+ 
+            theGiantCrab.position.set(0, 0, -35); // Spawns within the smaller map
+ 
+            theGiantCrab.userData.target = new THREE.Vector3();
+ 
+            theGiantCrab.userData.changeTargetTime = 0;
+ 
+            scene.add(theGiantCrab);
+ 
+        }
+ 
+
+ 
+        function createAxe() {
+ 
+            axeItem = new THREE.Group();
+ 
+            
+ 
+            const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 3), new THREE.MeshStandardMaterial({color: 0x4a3b2c}));
+ 
+            const blade = new THREE.Mesh(new THREE.BoxGeometry(1.5, 1.0, 0.15), new THREE.MeshStandardMaterial({color: 0x00ffff, emissive: 0x0055aa}));
+ 
+            blade.position.set(0.6, 1.0, 0);
+ 
+
+ 
+            axeItem.add(handle);
+ 
+            axeItem.add(blade);
+ 
+
+ 
+            const aura = new THREE.PointLight(0x00ffff, 4, 20);
+ 
+            axeItem.add(aura);
+ 
+
+ 
+            axeItem.position.set(0, 2.0, 0);
+ 
+            scene.add(axeItem);
+ 
+            
+ 
+            showNotification("CENTRAL VAULT OPEN: PROTOTYPE AXE DEPLOYED!");
+ 
+        }
+ 
+
+ 
+        // Advanced Collision Logic
+ 
+        function checkCollisionRaw(nx, nz, radius) {
+ 
+            // Map boundaries
+ 
+            if(nx > (MAP_BOUND-2) || nx < -(MAP_BOUND-2) || nz > (MAP_BOUND-2) || nz < -(MAP_BOUND-2)) return true;
+ 
+            
+ 
+            for(let o of obstacles) {
+ 
+                let dx = nx - o.x;
+ 
+                let dz = nz - o.z;
+ 
+                if(Math.sqrt(dx*dx + dz*dz) < (radius + o.radius)) return true;
+ 
+            }
+ 
+            return false;
+ 
+        }
+ 
+
+ 
+        function showNotification(msg) {
+ 
+            notifEl.innerText = msg;
+ 
+            notifEl.style.opacity = 1;
+ 
+            setTimeout(() => { notifEl.style.opacity = 0; }, 5000);
+ 
+        }
+ 
+
+ 
+        // --- UI TOGGLES ---
+ 
+        window.toggleLogs = function() {
+ 
+            if (crabDead) return; // Disable logs when game over
+ 
+            logsOpen = !logsOpen;
+ 
+            archiveLogUI.style.display = logsOpen ? 'flex' : 'none';
+ 
+            if(logsOpen) {
+ 
+                document.exitPointerLock();
+ 
+            } else {
+ 
+                document.body.requestPointerLock();
+ 
+            }
+ 
+        };
+ 
+
+ 
+        // --- INPUT HANDLING ---
+ 
+        function onMouseMove(event) {
+ 
+            if (!isLocked) return;
+ 
+            // Yaw rotates left/right
+ 
+            yawObj.rotation.y -= event.movementX * 0.002;
+ 
+            
+ 
+            // Pitch rotates up/down
+ 
+            pitchObj.rotation.x -= event.movementY * 0.002;
+ 
+            // Clamp pitch to avoid flipping over
+ 
+            pitchObj.rotation.x = Math.max(-Math.PI/2 + 0.1, Math.min(Math.PI/2 - 0.1, pitchObj.rotation.x));
+ 
+        }
+ 
+
+ 
+        function onKeyDown(event) {
+ 
+            switch (event.code) {
+ 
+                case 'ArrowUp': case 'KeyW': moveForward = true; break;
+ 
+                case 'ArrowLeft': case 'KeyA': moveLeft = true; break;
+ 
+                case 'ArrowDown': case 'KeyS': moveBackward = true; break;
+ 
+                case 'ArrowRight': case 'KeyD': moveRight = true; break;
+ 
+                case 'Space': if (canJump) velocity.y += 200; canJump = false; break;
+ 
+                case 'KeyE': tryRepairMachine(); break;
+ 
+                case 'KeyL': toggleLogs(); break;
+ 
+            }
+ 
+        }
+ 
+
+ 
+        function onKeyUp(event) {
+ 
+            switch (event.code) {
+ 
+                case 'ArrowUp': case 'KeyW': moveForward = false; break;
+ 
+                case 'ArrowLeft': case 'KeyA': moveLeft = false; break;
+ 
+                case 'ArrowDown': case 'KeyS': moveBackward = false; break;
+ 
+                case 'ArrowRight': case 'KeyD': moveRight = false; break;
+ 
+            }
+ 
+        }
+ 
+
+ 
+        function onMouseDown(event) {
+ 
+            // ONE-HIT EXECUTION LOGIC (Tap the crab)
+ 
+            if(event.button === 0 && isLocked && hasAxe && !isAttacking) {
+ 
+                isAttacking = true;
+ 
+                
+ 
+                setTimeout(() => { isAttacking = false; }, 450);
+ 
+
+ 
+                if(crabAwake && !crabDead) {
+ 
+                    // Update Raycaster from camera to center of screen
+ 
+                    raycaster.setFromCamera(screenCenter, camera);
+ 
+                    
+ 
+                    // Check if player is pointing at the crab
+ 
+                    const intersects = raycaster.intersectObject(theGiantCrab, true);
+ 
+                    let distToCrab = yawObj.position.distanceTo(theGiantCrab.position);
+ 
+
+ 
+                    // If pointing directly at crab within 30 units, OR just swinging wildly very close (12 units)
+ 
+                    if ((intersects.length > 0 && distToCrab < 30) || distToCrab < 12) {
+ 
+                        
+ 
+                        // Execution Flash Effect
+ 
+                        theGiantCrab.children.forEach(c => {
+ 
+                            if(c.material) c.material.emissive = new THREE.Color(0x00ffff);
+ 
+                        });
+ 
+                        
+ 
+                        // Instant Kill
+ 
+                        setTimeout(() => { dieCrab(); }, 150);
+ 
+                    }
+ 
+                }
+ 
+            }
+ 
+        }
+ 
+
+ 
+        function tryRepairMachine() {
+ 
+            if(!isLocked) return;
+ 
+            let pPos = yawObj.position;
+ 
+
+ 
+            for(let i=0; i
+																	<machines.length; i++) {
+ 
+                let m = machines[i];
+ 
+                if(!m.userData.repaired && pPos.distanceTo(m.position) < 8) {
+ 
+                    m.userData.repaired = true;
+ 
+                    m.material.color.setHex(0x00ff00);
+ 
+                    m.material.emissive.setHex(0x004400);
+ 
+                    
+ 
+                    machinesRepaired++;
+ 
+                    countEl.innerText = machinesRepaired;
+ 
+                    
+ 
+                    if(machinesRepaired === totalMachines) {
+ 
+                        createAxe();
+ 
+                    } else if (machinesRepaired === 4) {
+ 
+                        showNotification("WARNING: INCREASED SEISMIC ACTIVITY DETECTED.");
+ 
+                    }
+ 
+                    break;
+ 
+                }
+ 
+            }
+ 
+        }
+ 
+
+ 
+        function dieCrab() {
+ 
+            crabDead = true;
+ 
+            bossUI.style.display = 'none';
+ 
+            
+ 
+            // Pop the win screen with Lore after a brief moment
+ 
+            setTimeout(() => {
+ 
+                document.exitPointerLock();
+ 
+                document.getElementById('win-screen').style.display = 'flex';
+ 
+            }, 800);
+ 
+        }
+ 
+
+ 
+        function diePlayer() {
+ 
+            document.exitPointerLock();
+ 
+            document.getElementById('death-screen').style.display = 'flex';
+ 
+        }
+ 
+
+ 
+        function onWindowResize() {
+ 
+            camera.aspect = window.innerWidth / window.innerHeight;
+ 
+            camera.updateProjectionMatrix();
+ 
+            renderer.setSize(window.innerWidth, window.innerHeight);
+ 
+        }
+ 
+
+ 
+        function animate() {
+ 
+            requestAnimationFrame(animate);
+ 
+            const time = performance.now();
+ 
+            const delta = (time - prevTime) / 1000;
+ 
+            prevTime = time;
+ 
+
+ 
+            if (isLocked && !logsOpen) {
+ 
+                // --- TRUE THIRD PERSON MOVEMENT ---
+ 
+                // Apply friction
+ 
+                velocity.x -= velocity.x * 10.0 * delta;
+ 
+                velocity.z -= velocity.z * 10.0 * delta;
+ 
+                velocity.y -= 9.8 * 60.0 * delta; // Gravity
+ 
+
+ 
+                // Calculate requested movement direction in local space
+ 
+                // In ThreeJS, negative Z is forward.
+ 
+                direction.z = Number(moveBackward) - Number(moveForward); 
+ 
+                direction.x = Number(moveRight) - Number(moveLeft);
+ 
+                direction.normalize(); // Ensure diagonal isn't faster
+ 
+
+ 
+                const speed = 250.0 * delta;
+ 
+                if (moveForward || moveBackward) velocity.z += direction.z * speed;
+ 
+                if (moveLeft || moveRight) velocity.x += direction.x * speed;
+ 
+
+ 
+                // Save old positions before applying translations
+ 
+                let oldX = yawObj.position.x;
+ 
+                let oldZ = yawObj.position.z;
+ 
+
+ 
+                // Apply translations locally (moves in the direction yawObj is facing)
+ 
+                yawObj.translateX(velocity.x * delta);
+ 
+                if (checkCollisionRaw(yawObj.position.x, yawObj.position.z, 1.2)) {
+ 
+                    yawObj.position.x = oldX; // Revert X if collides
+ 
+                }
+ 
+
+ 
+                yawObj.translateZ(velocity.z * delta);
+ 
+                if (checkCollisionRaw(yawObj.position.x, yawObj.position.z, 1.2)) {
+ 
+                    yawObj.position.z = oldZ; // Revert Z if collides
+ 
+                }
+ 
+                
+ 
+                // Vertical movement
+ 
+                yawObj.position.y += (velocity.y * delta);
+ 
+
+ 
+                // Floor boundary
+ 
+                if (yawObj.position.y < 1.5) {
+ 
+                    velocity.y = 0;
+ 
+                    yawObj.position.y = 1.5;
+ 
+                    canJump = true;
+ 
+                }
+ 
+
+ 
+                // --- PLAYER ANIMATION ---
+ 
+                isMoving = (Math.abs(velocity.x) > 2 || Math.abs(velocity.z) > 2);
+ 
+                
+ 
+                if (isMoving) {
+ 
+                    let walkSpeed = time * 0.015;
+ 
+                    playerLegL.rotation.x = Math.sin(walkSpeed) * 0.8;
+ 
+                    playerLegR.rotation.x = -Math.sin(walkSpeed) * 0.8;
+ 
+                    
+ 
+                    if(!isAttacking) {
+ 
+                        playerArmL.rotation.x = -Math.sin(walkSpeed) * 0.6;
+ 
+                        playerArmR.rotation.x = Math.sin(walkSpeed) * 0.6;
+ 
+                    }
+ 
+                } else {
+ 
+                    playerLegL.rotation.x = 0;
+ 
+                    playerLegR.rotation.x = 0;
+ 
+                    if(!isAttacking) {
+ 
+                        playerArmL.rotation.x = 0;
+ 
+                        playerArmR.rotation.x = 0;
+ 
+                    }
+ 
+                }
+ 
+
+ 
+                if (isAttacking) {
+ 
+                    playerArmR.rotation.x = -Math.PI / 1.5; // Chop animation
+ 
+                }
+ 
+
+ 
+                // --- INTERACTIONS ---
+ 
+                let pPos = yawObj.position;
+ 
+
+ 
+                let nearMachine = false;
+ 
+                for(let m of machines) {
+ 
+                    if(!m.userData.repaired && pPos.distanceTo(m.position) < 8) {
+ 
+                        nearMachine = true; break;
+ 
+                    }
+ 
+                }
+ 
+                promptEl.style.display = nearMachine ? 'block' : 'none';
+ 
+
+ 
+                // Collecting Axe
+ 
+                if (axeItem && !hasAxe) {
+ 
+                    axeItem.rotation.y += delta * 2; 
+ 
+                    if (pPos.distanceTo(axeItem.position) < 5) {
+ 
+                        hasAxe = true;
+ 
+                        scene.remove(axeItem);
+ 
+                        
+ 
+                        const heldAxe = new THREE.Group();
+ 
+                        const h = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 1.8), new THREE.MeshStandardMaterial({color: 0x4a3b2c}));
+ 
+                        const b = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.6, 0.1), new THREE.MeshStandardMaterial({color: 0x00ffff, emissive: 0x003366}));
+ 
+                        b.position.set(0.4, 0.6, 0);
+ 
+                        heldAxe.add(h); heldAxe.add(b);
+ 
+                        
+ 
+                        heldAxe.position.set(0, -0.8, 0.4);
+ 
+                        heldAxe.rotation.x = Math.PI/2;
+ 
+                        playerArmR.add(heldAxe);
+ 
+
+ 
+                        weaponStatEl.innerText = "WEAPON: PROTOTYPE AXE";
+ 
+                        weaponStatEl.style.color = "#00ffff";
+ 
+                        showNotification("WEAPON ACQUIRED. FIND AND EXECUTE TARGET.");
+ 
+                        
+ 
+                        crabAwake = true;
+ 
+                        bossUI.style.display = 'block'; // Show objective
+ 
+                    }
+ 
+                }
+ 
+
+ 
+                // --- CRAB WANDERING/HUNTING LOGIC ---
+ 
+                if (!crabDead) {
+ 
+                    let distToPlayer = theGiantCrab.position.distanceTo(pPos);
+ 
+
+ 
+                    // If crab touches player without player tapping it -> game over
+ 
+                    if (distToPlayer < 3.5) {
+ 
+                        diePlayer();
+ 
+                    }
+ 
+
+ 
+                    if (crabAwake) {
+ 
+                        // WANDERING MODE (Finding the crab in the fog)
+ 
+                        if (time > theGiantCrab.userData.changeTargetTime) {
+ 
+                            theGiantCrab.userData.target.set(
+ 
+                                theGiantCrab.position.x + (Math.random() - 0.5) * 40,
+ 
+                                0,
+ 
+                                theGiantCrab.position.z + (Math.random() - 0.5) * 40
+ 
+                            );
+ 
+                            theGiantCrab.userData.changeTargetTime = time + 3000 + Math.random() * 4000;
+ 
+                        }
+ 
+
+ 
+                        const target = theGiantCrab.userData.target;
+ 
+                        const dx = target.x - theGiantCrab.position.x;
+ 
+                        const dz = target.z - theGiantCrab.position.z;
+ 
+                        const distToTarget = Math.sqrt(dx*dx + dz*dz);
+ 
+                        const crabWanderSpeed = 4.5;
+ 
+
+ 
+                        if (distToTarget > 1.0) {
+ 
+                            theGiantCrab.lookAt(target.x, theGiantCrab.position.y, target.z);
+ 
+                            
+ 
+                            let nX = theGiantCrab.position.x + (dx/distToTarget) * crabWanderSpeed * delta; 
+ 
+                            let nZ = theGiantCrab.position.z + (dz/distToTarget) * crabWanderSpeed * delta;
+ 
+                            
+ 
+                            // Bounds check
+ 
+                            if(nX > -40 && nX < 40 && nZ > -40 && nZ < 40 && !checkCollisionRaw(nX, nZ, 2.5)) {
+ 
+                                theGiantCrab.position.x = nX; 
+ 
+                                theGiantCrab.position.z = nZ;
+ 
+                            } else {
+ 
+                                theGiantCrab.userData.changeTargetTime = 0; // Force new target if blocked
+ 
+                            }
+ 
+
+ 
+                            // Leg animation
+ 
+                            for (let i = 0; i < theGiantCrab.userData.legs.length; i++) {
+ 
+                                theGiantCrab.userData.legs[i].rotation.x = Math.sin(time * 0.008 + (i % 2) * Math.PI) * 0.5;
+ 
+                            }
+ 
+                        }
+ 
+                    }
+ 
+                }
+ 
+                
+ 
+                if (crabDead) {
+ 
+                    // Dramatic death animation
+ 
+                    if (theGiantCrab.rotation.x < Math.PI) {
+ 
+                        theGiantCrab.rotation.x += delta * 4;
+ 
+                        theGiantCrab.position.y -= delta * 3;
+ 
+                        for (let i = 0; i < theGiantCrab.userData.legs.length; i++) {
+ 
+                            theGiantCrab.userData.legs[i].rotation.x = Math.random() * Math.PI;
+ 
+                        }
+ 
+                    }
+ 
+                }
+ 
+            }
+ 
+
+ 
+            renderer.render(scene, camera);
+ 
+        }
+ 
+    
+																	</script>
+																</body>
+															</html>
+														</p>
+													</body>
+												</html>
