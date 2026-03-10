@@ -1,0 +1,1821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camp Ohio: The Anomaly</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif !important;
+            user-select: none;
+        }
+        
+        @keyframes shimmer {
+            100% { transform: translateX(100%); }
+        }
+        .animate-shimmer {
+            animation: shimmer 2s infinite;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        img.fallback-hide {
+            text-indent: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-slate-950 flex items-center justify-center p-4 text-slate-100 selection:bg-pink-500/30" onload="initMenu()">
+
+    <div class="w-full max-w-5xl h-[700px] relative bg-slate-900 overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] rounded-2xl border-4 border-slate-800">
+
+        <!-- ================= START MENU SCREEN ================= -->
+        <div id="start-screen" class="absolute inset-0 z-50 overflow-hidden fade-in flex flex-col items-center justify-center p-8 text-center bg-slate-950/90">
+            <!-- Background Image -->
+            <img src="./bg_menu.jpg" alt="Menu Background" onerror="this.style.display='none'" class="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-screen fallback-hide" />
+            
+            <div class="relative z-10 w-full mb-8">
+                <h1 class="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-br from-pink-300 via-pink-500 to-indigo-500 mb-2 drop-shadow-[0_0_25px_rgba(244,114,182,0.4)] tracking-tighter">
+                    CAMP OHIO
+                </h1>
+                <h2 class="text-xl md:text-xl text-indigo-300 font-bold tracking-[0.4em] uppercase opacity-80">
+                    The Anomaly
+                </h2>
+            </div>
+            
+            <h3 class="relative z-10 text-2xl text-white font-bold mb-6 tracking-widest border-b-2 border-slate-700 pb-2">SELECT CAMPER</h3>
+
+            <!-- Character Selection Container -->
+            <div class="relative z-10 flex flex-col md:flex-row gap-8 w-full max-w-3xl justify-center items-center">
+                
+                <!-- Character: Amy -->
+                <div class="bg-slate-900/90 p-6 rounded-3xl border-2 border-pink-500/40 flex flex-col items-center shadow-[0_0_30px_rgba(236,72,153,0.15)] w-64">
+                    <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-pink-500 mb-4 bg-slate-800">
+                        <img src="./image_44fc01.jpg" alt="Amy" onerror="this.src='https://placehold.co/400x600/pink/white?text=Amy'" class="w-full h-full object-cover" />
+                    </div>
+                    <h3 class="text-2xl font-black text-pink-400 mb-1">Amy</h3>
+                    <p class="text-slate-400 text-xs mb-6 text-center h-12">Paranoid Genius<br>Route: The Mechanism</p>
+                    <button onclick="startRoute('amy')" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-black py-3 px-6 rounded-xl transition-all shadow-lg hover:scale-105 border border-pink-400 uppercase tracking-widest text-sm">
+                        Start Route
+                    </button>
+                </div>
+
+                <!-- Character: Mina -->
+                <div id="mina-card" class="bg-slate-900/90 p-6 rounded-3xl border-2 border-purple-500/40 flex flex-col items-center shadow-[0_0_30px_rgba(168,85,247,0.15)] w-64 relative overflow-hidden">
+                    
+                    <!-- Locked Overlay -->
+                    <div id="mina-locked" class="absolute inset-0 bg-slate-950/90 backdrop-blur-sm z-20 flex flex-col items-center justify-center text-center p-4 cursor-not-allowed">
+                        <span class="text-5xl mb-3">🔒</span>
+                        <span class="text-purple-400 font-bold text-sm uppercase tracking-widest">Complete Amy's<br>Episode 2<br>To Unlock</span>
+                    </div>
+
+                    <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-purple-500 mb-4 bg-slate-800">
+                        <img src="./mina.jpg" alt="Mina" onerror="this.src='https://placehold.co/400x600/purple/white?text=Mina'" class="w-full h-full object-cover" />
+                    </div>
+                    <h3 class="text-2xl font-black text-purple-400 mb-1">Mina</h3>
+                    <p class="text-slate-400 text-xs mb-6 text-center h-12">Goth Tomboy<br>Route: The Rebellion</p>
+                    <button onclick="startRoute('mina')" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-black py-3 px-6 rounded-xl transition-all shadow-lg hover:scale-105 border border-purple-400 uppercase tracking-widest text-sm">
+                        Start Route
+                    </button>
+                </div>
+
+                <!-- Character: Siblings -->
+                <div id="siblings-card" class="bg-slate-900/90 p-6 rounded-3xl border-2 border-emerald-500/40 flex flex-col items-center shadow-[0_0_30px_rgba(34,197,94,0.15)] w-64 relative overflow-hidden">
+                    
+                    <!-- Locked Overlay -->
+                    <div id="siblings-locked" class="absolute inset-0 bg-slate-950/90 backdrop-blur-sm z-20 flex flex-col items-center justify-center text-center p-4 cursor-not-allowed">
+                        <span class="text-5xl mb-3">🔒</span>
+                        <span class="text-emerald-400 font-bold text-sm uppercase tracking-widest">Buy Secret Diary<br>on Amy's Route</span>
+                    </div>
+
+                    <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-emerald-500 mb-4 bg-slate-800">
+                        <img src="./janet.jpg" alt="Janet" onerror="this.src='https://placehold.co/400x600/green/white?text=Janet'" class="w-full h-full object-cover" />
+                    </div>
+                    <h3 class="text-2xl font-black text-emerald-400 mb-1">Siblings</h3>
+                    <p class="text-slate-400 text-xs mb-6 text-center h-12">Scout Duo<br>Route: The Campfire Mystery</p>
+                    <button onclick="startRoute('siblings')" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-3 px-6 rounded-xl transition-all shadow-lg hover:scale-105 border border-emerald-400 uppercase tracking-widest text-sm">
+                        Start Route
+                    </button>
+                </div>
+            </div>
+
+            <!-- Home Screen Action Buttons -->
+            <div class="relative z-10 mt-10 flex flex-wrap justify-center gap-4 max-w-3xl">
+                <button onclick="openSaveLoadModal('load')" class="bg-slate-800 hover:bg-slate-700 text-white border-2 border-slate-600 font-bold py-3 px-6 rounded-xl transition-all shadow-lg flex items-center gap-2 hover:border-emerald-400">
+                    📂 Load
+                </button>
+                <button onclick="openProfileGallery()" class="bg-slate-800 hover:bg-slate-700 text-white border-2 border-slate-600 font-bold py-3 px-6 rounded-xl transition-all shadow-lg flex items-center gap-2 hover:border-indigo-400">
+                    👥 Profiles
+                </button>
+                <button onclick="openDiary()" class="bg-slate-800 hover:bg-slate-700 text-white border-2 border-slate-600 font-bold py-3 px-6 rounded-xl transition-all shadow-lg flex items-center gap-2 hover:border-amber-400">
+                    📖 Diary
+                </button>
+                <button onclick="clearSave()" class="bg-slate-800 hover:bg-red-900/50 text-slate-400 border-2 border-slate-700 font-bold py-3 px-6 rounded-xl transition-all shadow-lg flex items-center gap-2 hover:text-red-400 hover:border-red-500">
+                    🗑️ Reset All
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= END SCREEN ================= -->
+        <div id="end-screen" class="hidden absolute inset-0 flex-col items-center justify-center bg-slate-950 z-40 p-8 text-center fade-in">
+            <div id="end-content-best-friends" class="hidden flex-col items-center">
+                <h1 class="text-5xl md:text-6xl font-black mb-4 text-green-400 drop-shadow-[0_0_15px_rgba(74,222,128,0.6)]">BEST FRIENDS!</h1>
+                <div class="text-2xl text-pink-400 font-bold mb-6">Final Friendship: <span id="final-score-high"></span>%</div>
+                <div class="bg-slate-900/80 p-8 rounded-2xl border-2 border-green-900 mb-12 max-w-lg shadow-2xl">
+                    <p class="text-xl text-slate-300">Success! You proved you aren't completely brainwashed. You survived the anomaly together.</p>
+                </div>
+            </div>
+
+            <div id="end-content-acquaintances" class="hidden flex-col items-center">
+                <h1 class="text-5xl md:text-6xl font-black mb-4 text-red-500 drop-shadow-[0_0_15px_rgba(239,68,68,0.6)]">ACQUAINTANCES</h1>
+                <div class="text-2xl text-slate-400 font-bold mb-6">Final Friendship: <span id="final-score-low"></span>%</div>
+                <div class="bg-slate-900/80 p-8 rounded-2xl border-2 border-red-900 mb-12 max-w-lg shadow-2xl">
+                    <p class="text-xl text-slate-300">You survived the events, but your bond wasn't strong enough. You'll just have to survive the rest of the summer on your own.</p>
+                </div>
+            </div>
+
+            <button onclick="goHome()" class="bg-slate-800 hover:bg-slate-700 text-white border-2 border-slate-600 text-lg font-bold py-3 px-10 rounded-xl transition-all hover:scale-105">Return to Menu</button>
+        </div>
+
+        <!-- ================= MAIN GAME SCREEN ================= -->
+        <div id="game-screen" class="hidden absolute inset-0 fade-in">
+            <!-- Game Background -->
+            <div class="absolute inset-0 bg-slate-900">
+                <img id="game-bg" src="./bg_menu.jpg" alt="Game Background" onerror="this.style.display='none'" onload="this.style.display='block'" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 fallback-hide" />
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent mix-blend-multiply"></div>
+            </div>
+
+            <!-- Notification Popup -->
+            <div id="notification-box" class="hidden absolute top-6 left-1/2 -translate-x-1/2 z-[60] animate-[bounce_1s_infinite]">
+                <div id="notification-text" class="bg-amber-600/90 border-2 border-amber-300 text-white font-bold px-6 py-3 rounded-full shadow-[0_0_20px_rgba(217,119,6,0.8)] backdrop-blur-md flex items-center gap-2 text-center"></div>
+            </div>
+
+            <!-- Score Popup -->
+            <div id="score-popup" class="hidden absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-[60] animate-[bounce_0.5s_infinite]">
+                <div id="score-popup-text" class="text-2xl md:text-4xl font-black px-6 py-4 rounded-2xl border-4 shadow-[0_0_40px_rgba(0,0,0,0.8)] backdrop-blur-sm text-center"></div>
+            </div>
+
+            <!-- HUD: Stats -->
+            <div class="absolute top-6 right-6 z-40 bg-slate-900/80 p-4 rounded-2xl border-2 border-slate-700 w-64 md:w-72 backdrop-blur-md shadow-lg">
+                <div class="flex justify-between items-end mb-2 font-bold tracking-wide">
+                    <span id="ui-friend-label" class="text-pink-400 uppercase text-sm">Friendship</span>
+                    <span id="ui-friend-score" class="text-white text-lg">0%</span>
+                </div>
+                <div class="w-full bg-slate-950 rounded-full h-4 border border-slate-800 overflow-hidden mb-3 relative">
+                    <div id="ui-friend-bar" class="bg-gradient-to-r from-pink-600 to-pink-400 h-full transition-all duration-700 ease-out" style="width: 0%"></div>
+                    <div class="absolute top-0 bottom-0 left-[75%] w-1 bg-white shadow-[0_0_5px_rgba(255,255,255,1)]"></div>
+                </div>
+                <div class="flex justify-between items-center font-bold">
+                    <span class="text-yellow-400 uppercase text-sm">Coins</span>
+                    <span id="ui-coins" class="text-yellow-400 text-lg">🟡 0</span>
+                </div>
+            </div>
+
+            <!-- HUD: Buttons Left Column -->
+            <div class="absolute top-6 left-6 z-40 flex flex-col gap-3">
+                <button onclick="goHome()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-5 py-2 rounded-xl font-bold border border-slate-500 shadow-lg flex items-center justify-center gap-2 transition-transform hover:scale-105 w-32">
+                    🏠 Home
+                </button>
+                <button onclick="openSaveLoadModal('save')" class="bg-emerald-700 hover:bg-emerald-600 text-white px-5 py-2 rounded-xl font-bold border border-emerald-500 shadow-lg flex items-center justify-center gap-2 transition-transform hover:scale-105 w-32">
+                    💾 Save
+                </button>
+                <button onclick="openShop()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2 rounded-xl font-bold border border-indigo-400 shadow-lg flex items-center justify-center gap-2 transition-transform hover:scale-105 w-32">
+                    🏪 Shop
+                </button>
+                <button onclick="openDiary()" class="bg-amber-700 hover:bg-amber-600 text-white px-5 py-2 rounded-xl font-bold border border-amber-400 shadow-lg flex items-center justify-center gap-2 transition-transform hover:scale-105 w-32">
+                    📖 Diary
+                </button>
+                <div id="profile-btn-container" class="hidden w-32">
+                    <button id="profile-btn-color" onclick="openProfile()" class="bg-pink-700 hover:bg-pink-600 text-white px-5 py-2 w-full rounded-xl font-bold border border-pink-400 shadow-lg flex items-center justify-center gap-2 transition-transform hover:scale-105">
+                        👤 Profile
+                    </button>
+                </div>
+            </div>
+
+            <!-- Character Sprite (Centered) -->
+            <div id="character-sprite-container" class="absolute bottom-[25%] left-1/2 -translate-x-1/2 h-[70%] transition-all duration-300 ease-in-out origin-bottom z-10">
+                <img id="character-sprite-img" src="./image_44fc01.jpg" alt="Character" onerror="this.src='https://placehold.co/400x600/pink/white?text=Model'" class="h-full w-auto object-contain block rounded-xl" />
+            </div>
+
+            <!-- Dialogue Box -->
+            <div class="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 w-[95%] sm:w-[60%] bg-slate-950/95 border-2 border-slate-600 rounded-2xl p-4 shadow-2xl min-h-[120px] flex flex-col justify-between backdrop-blur-md z-20">
+                
+                <!-- Special Action Button -->
+                <div id="special-action-container" class="absolute -top-16 right-0 z-30 hidden">
+                    <button onclick="offerDrink()" class="bg-blue-500 hover:bg-blue-400 text-white px-5 py-2 sm:px-6 sm:py-3 rounded-xl font-black shadow-[0_0_20px_rgba(59,130,246,0.6)] animate-bounce border-2 border-blue-200 text-base sm:text-lg transition-transform hover:scale-105 flex items-center gap-2">
+                        💧 Offer Water
+                    </button>
+                </div>
+
+                <!-- Speaker Name -->
+                <div id="speaker-name-badge" class="hidden absolute -top-4 left-6 text-white px-5 py-1 rounded-lg text-sm font-bold border-2 tracking-wider shadow-lg bg-pink-600 border-pink-400">
+                    <span id="speaker-name"></span>
+                </div>
+
+                <!-- Dialogue Text -->
+                <div id="dialogue-text" class="text-slate-200 text-base md:text-lg font-medium leading-relaxed mt-2 italic"></div>
+
+                <!-- Choices Container -->
+                <div class="mt-3 flex flex-col items-end w-full">
+                    <div id="choices-container" class="w-full space-y-2 mt-2 grid grid-cols-1 gap-1">
+                        <!-- Choices injected here -->
+                    </div>
+                    <div id="next-btn-container" class="hidden w-full flex justify-end mt-2">
+                        <button id="next-btn" onclick="handleNext()" class="bg-pink-600 hover:bg-pink-500 text-white px-8 py-2 rounded-xl font-bold transition-all shadow-[0_0_15px_rgba(219,39,119,0.5)] flex items-center gap-2 group text-base">
+                            <span id="next-btn-text">Next</span> <span class="group-hover:translate-x-1 transition-transform">&#9654;</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MODALS ================= -->
+
+        <!-- Save/Load Modal -->
+        <div id="save-load-modal" class="hidden absolute inset-0 z-[120] bg-black/80 backdrop-blur-md items-center justify-center p-6 fade-in">
+            <div class="bg-slate-900 border-4 border-slate-600 rounded-3xl p-8 w-full max-w-lg shadow-[0_0_50px_rgba(0,0,0,0.8)] relative flex flex-col max-h-[90vh]">
+                <button onclick="closeSaveLoadModal()" class="absolute top-6 right-6 text-slate-400 hover:text-white text-4xl font-bold">&times;</button>
+                <h2 id="save-load-title" class="text-4xl font-black text-white mb-8 border-b-2 border-slate-700 pb-4">Save Game</h2>
+                
+                <div class="flex flex-col gap-4">
+                    <button id="slot-btn-1" onclick="handleSlotClick(1)" class="w-full bg-slate-800 hover:bg-slate-700 text-left px-6 py-4 rounded-xl border-2 border-slate-600 transition-all font-bold text-lg text-white shadow-lg flex items-center gap-4">
+                        Slot 1 - EMPTY
+                    </button>
+                    <button id="slot-btn-2" onclick="handleSlotClick(2)" class="w-full bg-slate-800 hover:bg-slate-700 text-left px-6 py-4 rounded-xl border-2 border-slate-600 transition-all font-bold text-lg text-white shadow-lg flex items-center gap-4">
+                        Slot 2 - EMPTY
+                    </button>
+                    <button id="slot-btn-3" onclick="handleSlotClick(3)" class="w-full bg-slate-800 hover:bg-slate-700 text-left px-6 py-4 rounded-xl border-2 border-slate-600 transition-all font-bold text-lg text-white shadow-lg flex items-center gap-4">
+                        Slot 3 - EMPTY
+                    </button>
+                    <button id="slot-btn-4" onclick="handleSlotClick(4)" class="w-full bg-slate-800 hover:bg-slate-700 text-left px-6 py-4 rounded-xl border-2 border-slate-600 transition-all font-bold text-lg text-white shadow-lg flex items-center gap-4">
+                        Slot 4 - EMPTY
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Linear Skill Check Mini-game Modal (Hacking) -->
+        <div id="skill-check-modal" class="hidden absolute inset-0 z-[110] bg-slate-950/90 backdrop-blur-sm flex-col items-center justify-center fade-in">
+            <h2 class="text-3xl md:text-4xl font-black text-white mb-2 tracking-widest drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">SECURITY LATCH BYPASS</h2>
+            <div class="text-xl md:text-2xl text-blue-400 font-bold mb-8">Latches Cleared: <span id="skill-progress" class="text-white font-black">0</span> / 10</div>
+            
+            <div class="relative w-[90%] sm:w-[500px] h-12 bg-slate-800 rounded-full border-4 border-slate-600 overflow-hidden mb-8 shadow-[0_0_30px_rgba(0,0,0,0.8)]">
+                <!-- Target Area -->
+                <div id="skill-target" class="absolute top-0 bottom-0 bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.8)] border-x-2 border-green-300"></div>
+                <!-- Moving Cursor -->
+                <div id="skill-cursor" class="absolute top-0 bottom-0 w-2 bg-white shadow-[0_0_15px_rgba(255,255,255,1)] rounded-full -translate-x-1/2"></div>
+            </div>
+            
+            <button onclick="hitSkillCheck()" class="bg-blue-600 hover:bg-blue-500 text-white px-12 py-4 rounded-2xl font-black text-2xl shadow-[0_0_20px_rgba(37,99,235,0.8)] transition-transform hover:scale-105 active:scale-95 border-2 border-blue-400">
+                HIT (Spacebar)
+            </button>
+            <p class="text-slate-400 mt-6 font-bold uppercase tracking-widest animate-pulse text-sm text-center px-4">Press when the line is inside the green zone!<br>Missing resets the entire lock.</p>
+        </div>
+
+        <!-- Circular Skill Check Mini-game Modal (Fishing) -->
+        <div id="skill-check-circle-modal" class="hidden absolute inset-0 z-[110] bg-slate-950/90 backdrop-blur-sm flex-col items-center justify-center fade-in">
+            <h2 class="text-3xl md:text-4xl font-black text-white mb-2 tracking-widest drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">FISHING PROBE</h2>
+            <div class="text-xl md:text-2xl text-purple-400 font-bold mb-8">Successful Reels: <span id="circle-skill-progress" class="text-white font-black">0</span> / 3</div>
+            
+            <div class="relative w-64 h-64 rounded-full bg-slate-800 border-8 border-slate-600 shadow-[0_0_30px_rgba(0,0,0,0.8)] mb-8">
+                <!-- Track for Target -->
+                <div id="circle-track" class="absolute inset-0 rounded-full"></div>
+                <!-- Center Pivot point -->
+                <div class="absolute top-1/2 left-1/2 w-4 h-4 bg-slate-400 rounded-full -translate-x-1/2 -translate-y-1/2 z-10"></div>
+                <!-- Rotating Cursor Needle -->
+                <div id="circle-cursor" class="absolute top-0 left-1/2 w-1 h-[50%] bg-white rounded-t-full origin-bottom shadow-[0_0_15px_rgba(255,255,255,1)]" style="transform: translateX(-50%) rotate(0deg);"></div>
+            </div>
+            
+            <button onclick="hitCircleSkillCheck()" class="bg-purple-600 hover:bg-purple-500 text-white px-12 py-4 rounded-2xl font-black text-2xl shadow-[0_0_20px_rgba(168,85,247,0.8)] transition-transform hover:scale-105 active:scale-95 border-2 border-purple-400">
+                REEL IN (Spacebar)
+            </button>
+            <p class="text-slate-400 mt-6 font-bold uppercase tracking-widest animate-pulse text-sm text-center px-4">Press when the needle is inside the green zone!<br>Timing is slightly slower than hacking.</p>
+        </div>
+
+        <!-- Simon Scope Mini-game Modal -->
+        <div id="color-memory-modal" class="hidden absolute inset-0 z-[110] bg-slate-950/90 backdrop-blur-sm flex-col items-center justify-center fade-in">
+            <h2 class="text-3xl md:text-4xl font-black text-white mb-2 tracking-widest drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">SIMON SCOPE</h2>
+            <div class="text-xl md:text-2xl text-purple-300 font-bold mb-6" id="color-memory-status">Round 1 / 6</div>
+
+            <div class="relative w-[280px] h-[280px] md:w-[340px] md:h-[340px] mb-8">
+                <div class="grid grid-cols-2 grid-rows-2 gap-3 w-full h-full">
+                    <button id="simon-pad-green" data-color="Green" class="simon-pad bg-emerald-500 rounded-2xl shadow-[0_0_30px_rgba(16,185,129,0.5)] focus:outline-none transition-all duration-200 active:scale-95"></button>
+                    <button id="simon-pad-red" data-color="Red" class="simon-pad bg-red-500 rounded-2xl shadow-[0_0_30px_rgba(239,68,68,0.5)] focus:outline-none transition-all duration-200 active:scale-95"></button>
+                    <button id="simon-pad-blue" data-color="Blue" class="simon-pad bg-blue-500 rounded-2xl shadow-[0_0_30px_rgba(59,130,246,0.5)] focus:outline-none transition-all duration-200 active:scale-95"></button>
+                    <button id="simon-pad-yellow" data-color="Yellow" class="simon-pad bg-amber-400 rounded-2xl shadow-[0_0_30px_rgba(251,191,36,0.6)] focus:outline-none transition-all duration-200 active:scale-95"></button>
+                </div>
+                <button id="simon-pad-purple" data-color="Purple" class="simon-pad absolute left-1/2 top-2 w-20 h-20 bg-purple-500 rounded-full shadow-[0_0_30px_rgba(168,85,247,0.5)] hidden focus:outline-none transition-all duration-200 active:scale-95 -translate-x-1/2"></button>
+                <button id="simon-pad-orange" data-color="Orange" class="simon-pad absolute left-1/2 bottom-2 w-20 h-20 bg-orange-400 rounded-full shadow-[0_0_30px_rgba(249,115,22,0.6)] hidden focus:outline-none transition-all duration-200 active:scale-95 -translate-x-1/2"></button>
+            </div>
+
+            <div id="color-memory-instructions" class="text-slate-300 text-sm md:text-base max-w-md text-center mb-4">
+                Watch the sequence, then repeat it by tapping the pads. Each round adds one more note.
+            </div>
+
+            <button id="color-memory-skip" onclick="endColorMemoryGame(true)" class="bg-red-600 hover:bg-red-500 text-white px-10 py-3 rounded-2xl font-bold shadow-lg">Give Up</button>
+            <p class="text-slate-400 mt-6 font-bold uppercase tracking-widest animate-pulse text-sm text-center px-4">Tap the colored pads in the right order to win. Fail and the sequence restarts.</p>
+        </div>
+
+        <!-- Shop Modal -->
+        <div id="shop-modal" class="hidden absolute inset-0 z-[80] bg-black/60 backdrop-blur-sm items-center justify-center p-4 fade-in">
+            <div class="bg-slate-900 border-4 border-indigo-500 rounded-2xl p-6 w-full max-w-md shadow-[0_0_30px_rgba(99,102,241,0.5)] flex flex-col max-h-[90vh]">
+                <div class="flex justify-between items-center mb-6 shrink-0">
+                    <h2 class="text-3xl font-black text-white">Camp Store</h2>
+                    <button onclick="closeShop()" class="text-slate-400 hover:text-white text-3xl font-bold">&times;</button>
+                </div>
+                <div class="flex justify-between items-center mb-6 bg-slate-800 p-4 rounded-xl shrink-0">
+                    <span class="text-slate-300 font-medium">Your Balance:</span>
+                    <span id="shop-coins" class="text-yellow-400 font-black text-2xl">🟡 0</span>
+                </div>
+                <div id="shop-items-container" class="space-y-4 overflow-y-auto pr-2 pb-2">
+                    <!-- Items injected here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Diary Modal -->
+        <div id="diary-modal" class="hidden absolute inset-0 z-[100] bg-black/80 flex items-center justify-center p-6 backdrop-blur-md fade-in">
+            <div class="bg-[#fdf6e3] text-slate-900 w-full max-w-3xl h-[85%] rounded-r-3xl rounded-l-md p-8 md:p-12 shadow-[inset_30px_0_30px_rgba(0,0,0,0.05),_0_0_50px_rgba(0,0,0,0.8)] border-l-[12px] border-amber-900 overflow-y-auto relative font-serif">
+                <div class="flex justify-between items-center border-b-2 border-amber-900/20 pb-4 mb-8 font-sans">
+                    <h2 class="text-4xl md:text-5xl font-black text-amber-900 flex items-center gap-3">Camp Memories</h2>
+                    <button onclick="closeDiary()" class="text-amber-900/60 hover:text-amber-900 text-4xl font-bold">&times;</button>
+                </div>
+                
+                <div id="diary-content-container" class="space-y-10">
+                    <!-- Diaries injected here -->
+                </div>
+                <p class="absolute bottom-6 right-10 text-sm text-amber-900/50 font-sans font-bold uppercase tracking-widest hidden md:block">Press Space to Close</p>
+            </div>
+        </div>
+
+        <!-- Profile Gallery Modal (Home Screen) -->
+        <div id="profile-gallery-modal" class="hidden absolute inset-0 z-[85] bg-black/80 backdrop-blur-md items-center justify-center p-6 fade-in">
+            <div class="bg-slate-900 border-4 border-indigo-500 rounded-3xl p-8 w-full max-w-3xl shadow-[0_0_50px_rgba(99,102,241,0.5)] relative flex flex-col max-h-[90vh]">
+                <button onclick="closeProfileGallery()" class="absolute top-6 right-6 text-slate-400 hover:text-white text-4xl font-bold">&times;</button>
+                <h2 class="text-4xl font-black text-white mb-8 border-b-2 border-slate-700 pb-4">Character Gallery</h2>
+                
+                <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-3 gap-6 overflow-y-auto pr-2 pb-2">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Specific Profile Details Modal -->
+        <div id="profile-modal" class="hidden absolute inset-0 z-[90] bg-black/80 flex items-center justify-center p-6 backdrop-blur-md fade-in">
+            <div id="profile-modal-box" class="bg-slate-900 border-4 border-pink-500 text-slate-200 w-full max-w-2xl rounded-3xl p-8 shadow-[0_0_50px_rgba(236,72,153,0.5)] relative">
+               <button onclick="closeProfile()" class="absolute top-6 right-6 text-slate-400 hover:text-white text-4xl font-bold">&times;</button>
+               <h2 class="text-4xl font-black mb-6 border-b-2 border-slate-700 pb-4" id="prof-header-name">Character Profile</h2>
+               
+               <div class="flex flex-col md:flex-row gap-8 items-center md:items-start">
+                 <div class="w-48 h-48 rounded-2xl overflow-hidden border-4 border-slate-700 bg-slate-800 shrink-0">
+                   <img id="prof-img" src="" alt="Profile" class="w-full h-full object-cover bg-white"/>
+                 </div>
+                 <div class="space-y-4 text-lg flex-1">
+                   <p><strong class="text-white">Name:</strong> <span id="prof-name"></span></p>
+                   <p><strong class="text-white">Location:</strong> <span id="prof-loc"></span></p>
+                   <p><strong class="text-white">Traits:</strong> <span id="prof-traits"></span></p>
+                   <div id="prof-secret-box" class="bg-slate-800 p-4 rounded-xl border-l-4 mt-4 shadow-inner">
+                     <p id="prof-secret-title" class="text-sm font-bold uppercase tracking-widest mb-2"></p>
+                     <p id="prof-secret-text" class="italic text-slate-300"></p>
+                   </div>
+                 </div>
+               </div>
+            </div>
+        </div>
+
+        <!-- WATERMARK -->
+        <div class="absolute bottom-2 right-4 z-[999] text-[10px] md:text-xs text-slate-400/50 font-bold uppercase tracking-widest pointer-events-none mix-blend-difference">
+            BUATAN MALAYSIA, Created by Hakimstudios 2026
+        </div>
+
+    </div>
+
+    <!-- ================= GAME LOGIC (JAVASCRIPT) ================= -->
+    <script>
+        // Global Game State
+        let currentRoute = 'amy';
+        let minaUnlocked = false;
+        let siblingsUnlocked = false;
+        let unlockedProfiles = [];
+        let globalDiaries = []; // Now saved globally
+
+        let currentNode = 'start';
+        let previousNode = null;
+        let friendScore = 0;
+        let coins = 0;
+        let inventory = [];
+        
+        let saveLoadMode = 'save';
+
+        // Linear Skill Check Variables (Hacking)
+        let skillAnimFrame;
+        let cursorPosition = 0;
+        let cursorDirection = 1;
+        let skillSpeed = 1.3;
+        let currentSkillTargetLeft = 40;
+        let currentSkillTargetWidth = 20;
+        let skillHits = 0;
+
+        // Circular Skill Check Variables (Fishing)
+        let circAnimFrame;
+        let circAngle = 0;
+        let circSpeed = 2.0;
+        let circTargetStart = 0;
+        let circTargetSize = 50; 
+        let circHits = 0;
+
+        // Color Memory Minigame State (Mina Route Episode 2)
+        let colorMemoryState = {
+            round: 0,
+            correct: 0,
+            target: null,
+            sequence: [],
+            inputIndex: 0,
+            totalRounds: 6,
+            active: false
+        };
+
+        // Initialize Menu Data
+        function initMenu() {
+            // Load Mina's route status
+            const savedMinaUnlock = localStorage.getItem('campOhioMinaUnlocked');
+            if (savedMinaUnlock === 'true') {
+                minaUnlocked = true;
+            }
+
+            // Load Siblings route status
+            const savedSiblingsUnlock = localStorage.getItem('campOhioSiblingsUnlocked');
+            if (savedSiblingsUnlock === 'true') {
+                siblingsUnlocked = true;
+            }
+            
+            // Load Unlocked Character Profiles
+            const savedProfiles = localStorage.getItem('campOhioProfiles');
+            if (savedProfiles) {
+                unlockedProfiles = JSON.parse(savedProfiles);
+            }
+
+            // Load Global Diaries
+            const savedDiaries = localStorage.getItem('campOhioDiaries');
+            if (savedDiaries) {
+                globalDiaries = JSON.parse(savedDiaries);
+            }
+
+            const minaLockedOverlay = document.getElementById('mina-locked');
+            if (minaUnlocked) {
+                minaLockedOverlay.classList.add('hidden');
+            } else {
+                minaLockedOverlay.classList.remove('hidden');
+            }
+
+            const siblingsLockedOverlay = document.getElementById('siblings-locked');
+            if (siblingsUnlocked) {
+                siblingsLockedOverlay.classList.add('hidden');
+            } else {
+                siblingsLockedOverlay.classList.remove('hidden');
+            }
+        }
+
+        // Global Profile Unlock Function
+        function unlockGlobalProfile(charId) {
+            if (!unlockedProfiles.includes(charId)) {
+                unlockedProfiles.push(charId);
+                localStorage.setItem('campOhioProfiles', JSON.stringify(unlockedProfiles));
+
+                let charName = 'Unknown';
+                switch (charId) {
+                    case 'amy': charName = 'Amy'; break;
+                    case 'mina': charName = 'Mina'; break;
+                    case 'janet': charName = 'Janet'; break;
+                    case 'bob': charName = 'Bob'; break;
+                    case 'siblings': charName = 'Siblings'; break;
+                }
+
+                showNotification(`🎉 ${charName}'s Profile Unlocked! Check the gallery.`);
+            }
+        }
+
+        // --- Save / Load Modals (4 Slots) ---
+        function openSaveLoadModal(mode) {
+            saveLoadMode = mode;
+            document.getElementById('save-load-title').innerText = mode === 'save' ? 'Save Game' : 'Load Game';
+            document.getElementById('save-load-title').className = `text-4xl font-black mb-8 border-b-2 border-slate-700 pb-4 ${mode === 'save' ? 'text-emerald-400' : 'text-blue-400'}`;
+            
+            renderSaveSlots();
+            document.getElementById('save-load-modal').classList.remove('hidden');
+            document.getElementById('save-load-modal').classList.add('flex');
+        }
+
+        function closeSaveLoadModal() {
+            document.getElementById('save-load-modal').classList.add('hidden');
+            document.getElementById('save-load-modal').classList.remove('flex');
+        }
+
+        function renderSaveSlots() {
+            for (let i = 1; i <= 4; i++) {
+                let slotData = localStorage.getItem('campOhioSaveSlot_' + i);
+                let btn = document.getElementById('slot-btn-' + i);
+                
+                // Set hover colors based on mode
+                let hoverColor = saveLoadMode === 'save' ? 'hover:border-emerald-500 hover:text-emerald-300' : 'hover:border-blue-500 hover:text-blue-300';
+                btn.className = `w-full bg-slate-800 hover:bg-slate-700 text-left px-6 py-4 rounded-xl border-2 border-slate-600 transition-all font-bold text-lg text-white shadow-lg flex items-center justify-between ${hoverColor}`;
+
+                if (slotData) {
+                    let parsed = JSON.parse(slotData);
+                    let routeName = parsed.currentRoute === 'amy' ? 'Amy' : (parsed.currentRoute === 'mina' ? 'Mina' : 'Siblings');
+                    btn.innerHTML = `<span>Slot ${i} - Route: ${routeName}</span> <span class="text-sm font-normal text-slate-400">Friendship: ${parsed.friendScore}% | 🟡 ${parsed.coins}</span>`;
+                } else {
+                    btn.innerHTML = `Slot ${i} - EMPTY`;
+                }
+            }
+        }
+
+        function handleSlotClick(i) {
+            if (saveLoadMode === 'save') {
+                saveToSlot(i);
+            } else {
+                loadFromSlot(i);
+            }
+        }
+
+        function saveToSlot(i) {
+            const saveState = {
+                currentRoute,
+                currentNode,
+                friendScore,
+                coins,
+                inventory
+            };
+            localStorage.setItem('campOhioSaveSlot_' + i, JSON.stringify(saveState));
+            showNotification(`💾 Saved Progress to Slot ${i}!`);
+            closeSaveLoadModal();
+        }
+
+        function loadFromSlot(i) {
+            const savedData = localStorage.getItem('campOhioSaveSlot_' + i);
+            if (savedData) {
+                try {
+                    const state = JSON.parse(savedData);
+                    currentRoute = state.currentRoute || 'amy';
+                    currentNode = state.currentNode || 'start';
+                    friendScore = state.friendScore || 0;
+                    coins = state.coins || 0;
+                    inventory = state.inventory || [];
+
+                    if (currentRoute === 'siblings') {
+                        siblingsUnlocked = true;
+                        localStorage.setItem('campOhioSiblingsUnlocked', 'true');
+                    }
+
+                    showScreen('game-screen');
+                    updateHUD();
+                    renderNode();
+                    showNotification(`📂 Game Loaded from Slot ${i}!`);
+                    closeSaveLoadModal();
+                } catch (e) {
+                    showNotification("❌ Error loading save data.");
+                }
+            } else {
+                showNotification(`❌ Slot ${i} is empty!`);
+            }
+        }
+
+        function clearSave() {
+            for(let i=1; i<=4; i++) {
+                localStorage.removeItem('campOhioSaveSlot_' + i);
+            }
+            localStorage.removeItem('campOhioMinaUnlocked');
+            localStorage.removeItem('campOhioSiblingsUnlocked');
+            localStorage.removeItem('campOhioProfiles');
+            localStorage.removeItem('campOhioDiaries');
+            minaUnlocked = false;
+            siblingsUnlocked = false;
+            unlockedProfiles = [];
+            globalDiaries = [];
+            
+            showNotification("🗑️ All Saves, Diaries, and Unlocks cleared! Refreshing...");
+            setTimeout(() => { window.location.reload(); }, 1500);
+        }
+
+        function goHome() {
+            showScreen('start-screen');
+            initMenu();
+        }
+
+        // Start Specific Route
+        function startRoute(routeStr) {
+            // Strong Guard to prevent bypassing via DOM manipulation
+            if (routeStr === 'mina' && !minaUnlocked) {
+                showNotification("🔒 Complete Amy's Episode 2 to unlock Mina!");
+                return; 
+            }
+
+            if (routeStr === 'siblings' && !siblingsUnlocked) {
+                showNotification("🔒 Buy the Secret Diary from Amy's route to unlock this story.");
+                return;
+            }
+
+            currentRoute = routeStr;
+            currentNode = (routeStr === 'amy') ? 'start' : (routeStr === 'mina' ? 'mina_start' : 'siblings_start');
+            
+            previousNode = null;
+            friendScore = 0;
+            coins = 0;
+            inventory = [];
+            
+            updateHUD();
+            renderNode();
+            showScreen('game-screen');
+        }
+
+        // Data for Game
+        const SHOP_ITEMS = [
+            { id: 'Water Bottle', price: 5, icon: '🧴' },
+            { id: 'Screwdriver', price: 10, icon: '🔧' },
+            { id: 'Strings', price: 15, icon: '🪢' },
+            { id: 'Fishing Rod', price: 17, icon: '🎣' },
+            { id: 'Binoculars', price: 25, icon: '🔭' },
+            { id: 'Secret Diary', price: 30, icon: '📓' }
+        ];
+
+        const STORY = {
+            // ================= AMY ROUTE =================
+            start: { speaker: "", text: "The bus ride to 'Summer Camp Ohio' felt much longer than the brochure suggested. The pamphlet promised sunshine, archery, and lifelong friendships. But as you step off the bus, the sky is a sickly, unyielding grey.", next: "start2" },
+            start2: { speaker: "", text: "The woods surrounding the camp feel unnaturally quiet. No birds are singing. No wind rustles the leaves. In fact, the leaves look a bit too glossy, almost like they're made of cheap plastic.", next: "start3" },
+            start3: { speaker: "", text: "You carry your heavy duffel bag towards the cabins. The counselors standing by the entrance have wide, unblinking smiles that don't quite reach their eyes. They wave at the campers in perfect, terrifying synchronization.", next: "node2" },
+            node2: { speaker: "", text: "Trying to avoid the creepy counselors, you take a detour behind the mess hall. There, you spot a girl sitting on a tree stump. She's clutching a pencil and frantically writing in a leather-bound notebook.", next: "node3" },
+            node3: { speaker: "???", text: "(Muttering to herself) ...soil acidity levels completely abnormal for this region... the bark texture is repeating every three inches... Wait, who's there?!", next: "choice1_prompt" },
+            choice1_prompt: {
+                speaker: "You", text: "(She's frantic and deeply suspicious. How do I approach her without sounding like one of them?)",
+                choices: [
+                    { text: "You're right, the bark texture repeats every 3.14 inches.", next: "c1_a", scoreChange: 20, coinChange: 5 },
+                    { text: "Shh, keep your voice down. They are watching us.", next: "c1_b", scoreChange: 10, coinChange: 3 },
+                    { text: "Don't worry, I won't tell the counselors you're out here.", next: "c1_c", scoreChange: -15 }
+                ]
+            },
+            c1_a: { speaker: "Amy", text: "You noticed?! Most campers are too brain-dead from the orientation video to see it. I'm Amy. The flora here is entirely artificial.", next: "node4" },
+            c1_b: { speaker: "Amy", text: "Paranoia is a healthy survival trait here. Good. I'm Amy. The flora here is entirely artificial, by the way.", next: "node4" },
+            c1_c: { speaker: "Amy", text: "Tell them?! Are you insane? If you even mention my name to them, they'll scrub your memory! Stay out of my way.", next: "node4" },
+            node4: { speaker: "Amy", text: "Look around you. The counselors haven't blinked once. I timed Counselor Steve; he stared at a pinecone for 47 minutes straight. And don't even get me started on the food.", next: "node4_b" },
+            node4_b: { speaker: "Amy", text: "They served 'Mystery Meatloaf' for lunch. I prodded it with my spork, and I swear it tried to bite me back.", next: "choice2_prompt" },
+            choice2_prompt: {
+                speaker: "You", text: "(What's the smartest way to handle the food situation?)",
+                choices: [
+                    { text: "I warned the other campers not to eat it. It's dangerous.", next: "c2_a", scoreChange: -20 },
+                    { text: "I slipped my meatloaf into my napkin. We can dissect it later.", next: "c2_b", scoreChange: 20, coinChange: 5 },
+                    { text: "I fed mine to a squirrel. The squirrel instantly dissolved.", next: "c2_c", scoreChange: 10, coinChange: 2 }
+                ]
+            },
+            c2_a: { speaker: "Amy", text: "You WARNED them?! Now the counselors know you're actively resisting assimilation! You've painted a massive target on your back!", next: "node5" },
+            c2_b: { speaker: "Amy", text: "Smart move. We need a physical sample if we're going to prove it's a sentient biomass designed to replace our internal organs.", next: "node5" },
+            c2_c: { speaker: "Amy", text: "A dissolving squirrel? Fascinating. And horrifying. I bet it's a highly corrosive sentient biomass.", next: "node5" },
+            node5: { speaker: "Amy", text: "Tonight, I'm sneaking out after curfew. That's when the 'Special Deliveries' arrive at the Camp Director's cabin.", next: "node5_b" },
+            node5_b: { speaker: "Amy", text: "I need to get close enough to see what they are unloading. If I get caught, they'll probably send me to the 'Happy Room'.", next: "choice3_prompt" },
+            choice3_prompt: {
+                speaker: "You", text: "(Sneaking out is risky. How should we plan this?)",
+                choices: [
+                    { text: "I'll distract them while you sneak into the cabin.", next: "c3_a", scoreChange: -15 },
+                    { text: "I'll go, but I'm bringing my camp-issued whistle just in case.", next: "c3_b", scoreChange: -20 },
+                    { text: "Midnight is too predictable. We should go during the 3 AM shift change.", next: "c3_c", scoreChange: 20, coinChange: 5 }
+                ]
+            },
+            c3_a: { speaker: "Amy", text: "Heroic, but stupid. A distraction means they capture you, torture you for my location, and we both lose.", next: "node6" },
+            c3_b: { speaker: "Amy", text: "A camp-issued whistle?! Are you trying to get us killed? That's a homing beacon! Leave it.", next: "node6" },
+            c3_c: { speaker: "Amy", text: "Exactly. The 3 AM circadian dip affects their synthetic biology too. Meet me by the flagpole at 0300 hours.", next: "node6" },
+            node6: { speaker: "", text: "Later that night, the camp is pitch black. You and Amy sneak past the mess hall. Suddenly, the heavy metal door of the kitchen creaks open.", next: "node6_b" },
+            node6_b: { speaker: "", text: "Counselor Steve emerges from the shadows. His usual plastered smile is gone. In the darkness, you can clearly see his eyes—they are glowing yellow.", next: "choice4_prompt" },
+            choice4_prompt: {
+                speaker: "You", text: "(He's scanning the perimeter! We only have a split second!)",
+                choices: [
+                    { text: "Freeze. Their vision is based on movement.", next: "c4_a", scoreChange: -20 },
+                    { text: "Toss a rock towards the mess hall to divert him.", next: "c4_b", scoreChange: 20, coinChange: 5 },
+                    { text: "Dive into the anomaly-free zone behind the dumpster.", next: "c4_c", scoreChange: 10 }
+                ]
+            },
+            c4_a: { speaker: "Amy", text: "(She yanks you violently to the ground) Are you crazy?! He has thermal vision! You almost got us assimilated!", next: "ep1_complete" },
+            c4_b: { speaker: "Amy", text: "(Whispering) Brilliant tactical misdirection. Let's move while his sensors are recalibrating...", next: "ep1_complete" },
+            c4_c: { speaker: "Amy", text: "(Whispering) Good instinct, but gross. The smell masks our thermal signature.", next: "ep1_complete" },
+            ep1_complete: { speaker: "Amy", text: "That was close. We survived night one. Tomorrow, we do a proper stakeout.", next: "ep2_start" },
+
+            // === EPISODE 2 ===
+            ep2_start: { speaker: "", text: "EPISODE 2: THE STAKEOUT. \nThe next morning, the sun is shining, but it feels artificially warm. You meet Amy behind the archery range.", next: "ep2_plan" },
+            ep2_plan: { speaker: "Amy", text: "New plan. The Director's cabin is heavily guarded during the day. We need to observe from afar. The camp store sells Binoculars for 25 Coins.", next: "ep2_hub" },
+            ep2_hub: {
+                speaker: "", text: "Gather enough coins and buy the Binoculars from the Shop.",
+                choices: [
+                    { text: "Start the Stakeout", next: "ep2_stakeout", requireItem: "Binoculars" },
+                    { text: "Search the dust for dropped coins", next: "ep2_grind1" }
+                ]
+            },
+            ep2_grind1: {
+                speaker: "", text: "You dig through the dirt near the vending machines.",
+                choices: [
+                    { text: "Keep searching", next: "ep2_grind2", coinChange: 3 },
+                    { text: "Return", next: "ep2_hub", coinChange: 2 }
+                ]
+            },
+            ep2_grind2: {
+                speaker: "", text: "You look under the wooden benches. Found a few more coins.",
+                choices: [
+                    { text: "Search the trash cans", next: "ep2_grind1", coinChange: 3 },
+                    { text: "Return", next: "ep2_hub", coinChange: 3 }
+                ]
+            },
+            ep2_stakeout: { speaker: "Amy", text: "Perfect, you got the Binoculars! Let's get up to the ridge.", next: "ep2_stakeout_b" },
+            ep2_stakeout_b: { speaker: "", text: "You raise the binoculars to your eyes and look at the back window of the cabin.", next: "ep2_q2" },
+            ep2_q2: {
+                speaker: "You", text: "(Looking carefully through the binoculars...)",
+                choices: [
+                    { text: "They're unloading crates of glowing green ooze into a vat!", next: "ep2_end_a", scoreChange: 30, coinChange: 5 },
+                    { text: "They're doing paperwork... wait, the paperwork is glowing.", next: "ep2_end_b", scoreChange: 10 }
+                ]
+            },
+            ep2_end_a: { speaker: "Amy", text: "I knew it! The biomass nutrient paste! This changes everything.", next: "ep2_complete" },
+            ep2_end_b: { speaker: "Amy", text: "Glowing paperwork? They must be using bioluminescent ink. They are evolving...", next: "ep2_complete" },
+            ep2_complete: { speaker: "Amy", text: "We've seen too much. We need to get back before they notice we're gone.", next: "ep3_start" },
+
+            // === EPISODE 3 ===
+            ep3_start: { speaker: "", text: "EPISODE 3: THE ANOMALY SKY. \nYou meet Amy inside her cabin. The interior is a mess of red string and blurry photos.", next: "ep3_plan" },
+            ep3_plan: { speaker: "Amy", text: "We need to send an aerial probe—a kite—to test if the sky is a localized projection. We need high-tension Strings to fly it.", next: "ep3_hub" },
+            ep3_hub: {
+                speaker: "", text: "You need to buy Strings from the Shop to proceed.",
+                choices: [
+                    { text: "Build the Kite", next: "ep3_kite", requireItem: "Strings", scoreChange: 30 },
+                    { text: "Search Cabin 5 for spare change", next: "ep3_grind1" }
+                ]
+            },
+            ep3_grind1: {
+                speaker: "", text: "You search under Amy's bunk bed and find coins.",
+                choices: [
+                    { text: "Keep searching", next: "ep3_hub", coinChange: 5 }
+                ]
+            },
+            ep3_kite: { speaker: "Amy", text: "Perfect! Let's assemble it and head to the clearing.", next: "ep3_flight" },
+            ep3_flight: { speaker: "", text: "The kite flies higher and higher... until it hits the sky with a loud electrical spark!", next: "ep4_start" },
+
+            // === EPISODE 4 ===
+            ep4_start: { speaker: "", text: "EPISODE 4: THE MECHANISM. \nThe kite crashes, dragging a metallic drone camera with it.", next: "ep4_cam" },
+            ep4_cam: { speaker: "Amy", text: "They were watching us from the 'sky'. But the casing is fused shut. We need a Screwdriver to bypass the latches.", next: "ep4_hub" },
+            ep4_hub: {
+                speaker: "", text: "You need a Screwdriver from the shop to begin the disassembly.",
+                choices: [
+                    { text: "Begin Disassembly (Skill Check)", next: "ep4_minigame_prep", requireItem: "Screwdriver" },
+                    { text: "Search the crater for coins", next: "ep4_grind1" }
+                ]
+            },
+            ep4_grind1: {
+                speaker: "", text: "You find some loose coins near the crash site.",
+                choices: [
+                    { text: "Return", next: "ep4_hub", coinChange: 5 }
+                ]
+            },
+            ep4_minigame_prep: { speaker: "Amy", text: "You have to bypass 10 security latches in a row. If you miss, the lock resets!", next: "ep4_trigger" },
+            ep4_trigger: {
+                speaker: "", text: "Get ready for the Skill Check. Press SPACEBAR when the moving line is inside the green zone!",
+                specialAction: "startSkillCheck"
+            },
+            ep4_success: { speaker: "Amy", text: "You did it! The final latch popped open! I can't believe you actually pulled that off.", unlockProfile: true, next: "ep4_diary" },
+            ep4_diary: { speaker: "Amy", text: "This data drive has exactly what we need. We're going to blow the lid off this entire camp.", end: true },
+
+            drink_thanks: { speaker: "Amy", text: "*Gulp, gulp*... Ahh! Thank you so much! I was getting incredibly parched. I owe you one.", next: "RETURN" },
+
+            // ================= MINA ROUTE =================
+            mina_start: { speaker: "", text: "EPISODE 1: THE REBELLION.\nYou wander down to the old boathouse, looking for a way out of this creepy camp. Sitting on the edge of the dock is a girl in heavy combat boots and dark makeup.", next: "mina_node2" },
+            mina_node2: { speaker: "Mina", text: "You're walking too loud, camper. You'll wake up the lake monsters. Or worse, the counselors.", next: "mina_choice1" },
+            mina_choice1: { speaker: "You", text: "(She doesn't seem like the other brainwashed campers...)", choices: [
+                { text: "Lake monsters? Are you serious?", next: "mina_c1_a", scoreChange: 10 },
+                { text: "Nice boots.", next: "mina_c1_b", scoreChange: 20 },
+                { text: "We need to get out of here.", next: "mina_c1_c", scoreChange: 5 }
+            ]},
+            mina_c1_a: { speaker: "Mina", text: "Everything here is a monster, genius. I'm Mina. And you're currently standing on my dock.", next: "mina_node3" },
+            mina_c1_b: { speaker: "Mina", text: "Thanks. Good for kicking alien teeth in. I'm Mina.", next: "mina_node3" },
+            mina_c1_c: { speaker: "Mina", text: "Good luck with that. The perimeter is fenced with some invisible sci-fi nonsense. I'm Mina, by the way.", next: "mina_node3" },
+            mina_node3: { speaker: "Mina", text: "I've been sabotaging the camp's audio speakers so they can't broadcast their subliminal junk. But I dropped my multi-tool in the lake.", next: "mina_hub" },
+            
+            mina_hub: { 
+                speaker: "", text: "You need to buy a Fishing Rod from the shop (17 Coins) to retrieve her multi-tool.", 
+                choices: [
+                    { text: "Retrieve Tool (Skill Check)", next: "mina_fish_prep", requireItem: "Fishing Rod" },
+                    { text: "Search the dock for coins", next: "mina_grind1" }
+                ]
+            },
+            mina_grind1: {
+                speaker: "", text: "You search the slimy wooden planks of the dock.",
+                choices: [
+                    { text: "Keep searching", next: "mina_grind2", coinChange: 4 },
+                    { text: "Return", next: "mina_hub", coinChange: 5 }
+                ]
+            },
+            mina_grind2: {
+                speaker: "", text: "You look inside an empty bait bucket. Found some loose change.",
+                choices: [
+                    { text: "Return", next: "mina_hub", coinChange: 8 }
+                ]
+            },
+            mina_fish_prep: { speaker: "Mina", text: "You got a rod? Good. Now cast it right near that patch of glowing algae. Don't mess up.", next: "mina_trigger" },
+            mina_trigger: {
+                speaker: "", text: "Get ready for the Fishing Probe Skill Check. Press SPACEBAR when the needle is inside the green zone!",
+                specialAction: "startCircleSkillCheck"
+            },
+            mina_success: { speaker: "Mina", text: "You actually got it! ...Ew, it's covered in that glowing slime. Thanks, I guess.", unlockProfile: true, next: "mina_roommate" },
+            mina_fail: { speaker: "Mina", text: "You dropped it back in! Ugh, focus! Try again.", next: "mina_trigger" },
+            mina_roommate: { speaker: "Mina", text: "This place is driving me crazy. My roommate, Amy, is literally insane. She covers the walls in red string and won't stop muttering about 'biomass'.", next: "mina_ep2_intro" },
+            // Backwards compatibility for older saves
+            mina_end: { speaker: "Mina", text: "Anyway, if you want to survive the summer, stick with me. We're going to burn this synthetic camp to the ground.", next: "mina_ep2_intro" },
+            mina_ep2_intro: { speaker: "Mina", text: "Also... I found this strange glowing ball near the dock. It changes colors when you touch it. Want to see if it's some kind of game?", next: "mina_ep2_ball" },
+            mina_ep2_ball: { speaker: "", text: "You take the mystery ball. It hums softly and shifts colors like some old memory toy. The challenge is simple: repeat the growing pattern to win.", specialAction: "startColorMemoryGame" },
+            mina_ep2_complete: { speaker: "Mina", text: "Not bad. That thing was weirder than I thought. Now let's burn this place down.", unlockProfile: true, end: true },
+
+            // ================= SIBLINGS ROUTE =================
+            siblings_start: { speaker: "", text: "EPISODE 1: CAMPFIRE MYSTERY.\nYou stumble upon two campers sitting at a small campfire, wearing matching scout neckerchiefs. Their faces light up when they see you approach.", next: "siblings_intro" },
+            siblings_intro: { speaker: "Janet", text: "Hiya! I'm Janet, and this is my brother Bob. We just got our 'Helpful Scout' badges. What brings you to our campfire?", next: "siblings_choice1" },
+            siblings_choice1: { speaker: "You", text: "(They seem nice, but you can tell they don't know what's really going on.)", choices: [
+                { text: "We were just checking out the grounds. You guys look like you're having fun.", next: "siblings_friendly", scoreChange: 15 },
+                { text: "Actually, something weird is going on here... like, really weird.", next: "siblings_suspicious", scoreChange: -10 },
+                { text: "I heard Amy failed the campfire competition. That's rough.", next: "siblings_amy_fail", scoreChange: 5 }
+            ]},
+            siblings_friendly: { speaker: "Janet", text: "That's what we like to hear! Scouts should be friendly. Want some cookies?", next: "siblings_cookie_offer" },
+            siblings_suspicious: { speaker: "Janet", text: "Weird? The camp is just... normal. Maybe you need to get more sleep?", next: "siblings_cookie_offer" },
+            siblings_amy_fail: { speaker: "Janet", text: "Amy? She totally flubbed the skit. She was supposed to lead the campfire song and forgot the lyrics. Bob almost laughed!", next: "siblings_cookie_offer" },
+            siblings_cookie_offer: { speaker: "Bob", text: "Hey, do you want some of our trail mix? We were going to offer it to Amy but she was in a mood.", choices: [
+                { text: "Sure, thanks." , next: "siblings_accept_mix", scoreChange: 10 },
+                { text: "No thanks, I'm fine.", next: "siblings_decline_mix", scoreChange: -5 }
+            ]},
+            siblings_accept_mix: { speaker: "Bob", text: "Cool! We're trying to earn our 'Camp Counselor' badge, so we keep an eye on everyone. Keep it on the down low though—Janet hates when people know too much.", next: "siblings_water_prompt" },
+            siblings_decline_mix: { speaker: "Bob", text: "Fine, your loss. Janet says being hospitable is important, but whatever.", next: "siblings_water_prompt" },
+            siblings_water_prompt: { speaker: "Janet", text: "Actually, you seem kind of thirsty. Want some water?", next: "siblings_after_water" },
+            siblings_after_water: { speaker: "Janet", text: "...We can’t accept drinks from strangers. Sorry, it’s a scout rule.", next: "siblings_ep1_complete" },
+            siblings_ep1_complete: { speaker: "Bob", text: "Anyway, you should head back before the counselors notice you missing. We'll be around the lake if you want to hang later.", unlockProfile: 'bob', next: "siblings_bob_entry" },
+            siblings_bob_entry: { speaker: "Bob", text: "Also, don't tell anyone, but I saw Amy sneaking around the director's cabin last night. She looked terrified.", next: "siblings_amy_arrival" },
+            siblings_amy_arrival: { speaker: "Amy", text: "What are you two doing out here? If you tell anyone about the 'campfire incidents' I'll have to... deal with it.", next: "siblings_end" },
+            siblings_end: { speaker: "", text: "The fire crackles. You nod and quietly agree to keep your mouth shut, even as the strange feeling in your gut grows.", end: true },
+
+            mina_drink_thanks: { speaker: "Mina", text: "Water? Thanks. Was getting tired of the 'electrolyte punch' they serve. It tastes like battery acid.", next: "RETURN" }
+        };
+
+        // UI Management Functions
+        function showScreen(screenId) {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('end-screen').classList.add('hidden');
+            
+            document.getElementById(screenId).classList.remove('hidden');
+        }
+
+        function showNotification(text) {
+            const notifBox = document.getElementById('notification-box');
+            document.getElementById('notification-text').innerText = text;
+            notifBox.classList.remove('hidden');
+            setTimeout(() => {
+                notifBox.classList.add('hidden');
+            }, 5000);
+        }
+
+        function showScorePopup(text, isPositive) {
+            const popupBox = document.getElementById('score-popup');
+            const popupText = document.getElementById('score-popup-text');
+            
+            popupText.innerText = text;
+            if (isPositive) {
+                popupText.className = "text-2xl md:text-4xl font-black px-6 py-4 rounded-2xl border-4 shadow-[0_0_40px_rgba(0,0,0,0.8)] backdrop-blur-sm text-green-300 border-green-500 bg-green-900/90";
+            } else {
+                popupText.className = "text-2xl md:text-4xl font-black px-6 py-4 rounded-2xl border-4 shadow-[0_0_40px_rgba(0,0,0,0.8)] backdrop-blur-sm text-red-300 border-red-500 bg-red-900/90";
+            }
+            
+            popupBox.classList.remove('hidden');
+            setTimeout(() => { popupBox.classList.add('hidden'); }, 2500);
+        }
+
+        function updateHUD() {
+            document.getElementById('ui-friend-score').innerText = `${friendScore}%`;
+            document.getElementById('ui-friend-bar').style.width = `${friendScore}%`;
+            document.getElementById('ui-coins').innerText = `🟡 ${coins}`;
+            
+            // Adjust HUD colors depending on route
+            const friendLabel = document.getElementById('ui-friend-label');
+            const friendBar = document.getElementById('ui-friend-bar');
+            const profileBtn = document.getElementById('profile-btn-color');
+            const nextBtn = document.getElementById('next-btn');
+
+            if (currentRoute === 'amy') {
+                friendLabel.className = "text-pink-400 uppercase text-sm";
+                friendBar.className = "bg-gradient-to-r from-pink-600 to-pink-400 h-full transition-all duration-700 ease-out";
+                profileBtn.className = "bg-pink-700 hover:bg-pink-600 text-white px-5 py-2 w-full rounded-xl font-bold border border-pink-400 shadow-lg flex items-center justify-center gap-2 transition-transform hover:scale-105";
+                if(nextBtn) nextBtn.classList.replace('bg-purple-600', 'bg-pink-600');
+                if(nextBtn) nextBtn.classList.replace('hover:bg-purple-500', 'hover:bg-pink-500');
+                
+                // Amy Friendship Profile Unlock Logic
+                if (friendScore >= 75) {
+                    unlockGlobalProfile('amy');
+                }
+
+            } else if (currentRoute === 'siblings') {
+                friendLabel.className = "text-emerald-400 uppercase text-sm";
+                friendBar.className = "bg-gradient-to-r from-emerald-600 to-emerald-400 h-full transition-all duration-700 ease-out";
+                profileBtn.className = "bg-emerald-700 hover:bg-emerald-600 text-white px-5 py-2 w-full rounded-xl font-bold border border-emerald-400 shadow-lg flex items-center justify-center gap-2 transition-transform hover:scale-105";
+                if(nextBtn) nextBtn.classList.replace('bg-purple-600', 'bg-emerald-600');
+                if(nextBtn) nextBtn.classList.replace('hover:bg-purple-500', 'hover:bg-emerald-500');
+
+            } else {
+                friendLabel.className = "text-purple-400 uppercase text-sm";
+                friendBar.className = "bg-gradient-to-r from-purple-600 to-purple-400 h-full transition-all duration-700 ease-out";
+                profileBtn.className = "bg-purple-700 hover:bg-purple-600 text-white px-5 py-2 w-full rounded-xl font-bold border border-purple-400 shadow-lg flex items-center justify-center gap-2 transition-transform hover:scale-105";
+                if(nextBtn) nextBtn.classList.replace('bg-pink-600', 'bg-purple-600');
+                if(nextBtn) nextBtn.classList.replace('hover:bg-pink-500', 'hover:bg-purple-500');
+            }
+
+            // HUD Profile Button visibility
+            if (unlockedProfiles.includes(currentRoute)) {
+                document.getElementById('profile-btn-container').classList.remove('hidden');
+            } else {
+                document.getElementById('profile-btn-container').classList.add('hidden');
+            }
+        }
+
+        function checkBackgroundAndDiaries() {
+            const bgElement = document.getElementById('game-bg');
+            const spriteImg = document.getElementById('character-sprite-img');
+
+            // Route Specific Sprites
+            if (currentRoute === 'amy') {
+                spriteImg.src = "./image_44fc01.jpg";
+                spriteImg.setAttribute('onerror', "this.src='https://placehold.co/400x600/pink/white?text=Amy'");
+            } else if (currentRoute === 'mina') {
+                spriteImg.src = "./mina.jpg";
+                spriteImg.setAttribute('onerror', "this.src='https://placehold.co/400x600/purple/white?text=Mina'");
+            } else if (currentRoute === 'siblings') {
+                // Default sprite is Janet; switch to Bob when he joins; show Amy when she appears.
+                if (currentNode === 'siblings_bob_entry' || currentNode.startsWith('siblings_bob_')) {
+                    spriteImg.src = "./bob.jpg";
+                    spriteImg.setAttribute('onerror', "this.src='https://placehold.co/400x600/blue/white?text=Bob'");
+                } else if (currentNode === 'siblings_amy_arrival' || currentNode.startsWith('siblings_amy_')) {
+                    spriteImg.src = "./image_44fc01.jpg";
+                    spriteImg.setAttribute('onerror', "this.src='https://placehold.co/400x600/pink/white?text=Amy'");
+                } else {
+                    spriteImg.src = "./janet.jpg";
+                    spriteImg.setAttribute('onerror', "this.src='https://placehold.co/400x600/green/white?text=Janet'");
+                }
+            }
+            
+            // Dynamic Backgrounds and Diary Unlocks
+            if (currentNode.startsWith('mina')) {
+                bgElement.src = "./bg_mina.jpg";
+                if (currentNode === 'mina_ep2_intro') {
+                    unlockDiary(7, "Diary #7: Mina & The Pond", "I helped Mina fish her multi-tool out of the pond. The algae was glowing. Also, she's Amy's roommate, which explains a lot. She seems incredibly annoyed by her.");
+                }
+                if (currentNode === 'mina_ep2_complete') {
+                    unlockDiary(8, "Diary #8: The Color Ball", "Mina found a mysterious ball that changes color. We played a weird memory game with it... I think it was testing us.");
+                }
+            } else if (currentRoute === 'siblings') {
+                bgElement.src = "./bg_siblings.jpg";
+                if (currentNode === 'siblings_ep1_complete') {
+                    unlockDiary(9, "Diary #9: Campfire Fiasco", "Janet and Bob are just normal scouts. They have no idea this place is fake. Amy is terrified of them finding out.");
+                }
+            } else if (currentNode.startsWith('start') || currentNode.startsWith('node') || currentNode.startsWith('c1') || currentNode.startsWith('c2') || currentNode.startsWith('c3') || currentNode.startsWith('c4')) {
+                bgElement.src = "./bg_camp.jpg";
+            } else if (currentNode === 'ep2_start') {
+                bgElement.src = "./bg_ridge.jpg";
+                unlockDiary(1, "Diary #1: The Arrival", "Day 1. The trees here are definitely fake. I met Amy. We hid from Counselor Steve... his eyes were glowing yellow.");
+            } else if (currentNode.startsWith('ep2')) {
+                bgElement.src = "./bg_ridge.jpg";
+            } else if (currentNode === 'ep3_start') {
+                bgElement.src = "./bg_cabin.jpg";
+                unlockDiary(2, "Diary #2: The Stakeout", "Day 2. We staked out the Director's cabin and saw them unloading glowing green ooze!");
+                unlockDiary(3, "Diary #3: Cabin 5", "Day 3. I went to Amy's cabin. We're planning to fly a kite to test the atmospheric anomaly.");
+                
+                // UNLOCK MINA HERE (Occurs immediately after completing Episode 2)
+                if (!minaUnlocked) {
+                    minaUnlocked = true;
+                    localStorage.setItem('campOhioMinaUnlocked', 'true');
+                    showNotification("🔓 NEW CHARACTER UNLOCKED: Mina Monroe! Check the Home Screen.");
+                }
+
+            } else if (currentNode.startsWith('ep3')) {
+                bgElement.src = "./bg_cabin.jpg";
+            } else if (currentNode === 'ep4_start') {
+                bgElement.src = "./bg_camp.jpg";
+            } else if (currentNode.startsWith('ep4')) {
+                bgElement.src = "./bg_camp.jpg";
+                if (currentNode === 'ep4_diary') {
+                    unlockDiary(4, "Diary #4: The Mechanism", "The kite knocked loose a drone camera from the 'sky'. I hacked it open. Amy was genuinely impressed.");
+                }
+            }
+        }
+
+        // Global Diary Unlock
+        function unlockDiary(id, title, content) {
+            const exists = globalDiaries.find(d => d.id === id);
+            if (!exists) {
+                globalDiaries.push({ id, title, content });
+                localStorage.setItem('campOhioDiaries', JSON.stringify(globalDiaries));
+                showNotification(`📖 Memory Unlocked: ${title}`);
+            }
+        }
+
+        function renderNode() {
+            const data = STORY[currentNode];
+            
+            // Handle Direct Node Profile Unlocks
+            if (data.unlockProfile) {
+                const profileId = typeof data.unlockProfile === 'string' ? data.unlockProfile : currentRoute;
+                unlockGlobalProfile(profileId);
+                updateHUD();
+            }
+
+            checkBackgroundAndDiaries();
+
+            // Set Sprite Style (Centered left-1/2 instead of left-[25%])
+            const spriteContainer = document.getElementById('character-sprite-container');
+            if (data.speaker === 'You' || data.speaker === '') {
+                spriteContainer.className = "absolute bottom-[25%] left-1/2 -translate-x-1/2 h-[70%] transition-all duration-300 ease-in-out origin-bottom z-10 scale-[0.90] brightness-[0.5] opacity-90 drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]";
+            } else {
+                let glowColor;
+                if (currentRoute === 'amy') {
+                    glowColor = "rgba(236,72,153,0.4)";
+                } else if (currentRoute === 'siblings') {
+                    glowColor = "rgba(34,197,94,0.4)";
+                } else {
+                    glowColor = "rgba(168,85,247,0.4)";
+                }
+                spriteContainer.className = `absolute bottom-[25%] left-1/2 -translate-x-1/2 h-[70%] transition-all duration-300 ease-in-out origin-bottom z-10 scale-105 brightness-110 drop-shadow-[0_10px_30px_${glowColor}]`;
+            }
+
+            // Set Speaker Badge
+            const speakerBadge = document.getElementById('speaker-name-badge');
+            if (data.speaker) {
+                speakerBadge.classList.remove('hidden');
+                document.getElementById('speaker-name').innerText = data.speaker;
+                if (data.speaker === 'You') {
+                    speakerBadge.className = "absolute -top-4 left-6 text-white px-5 py-1 rounded-lg text-sm font-bold border-2 tracking-wider shadow-lg bg-indigo-600 border-indigo-400";
+                } else if (data.speaker === 'Mina') {
+                    speakerBadge.className = "absolute -top-4 left-6 text-white px-5 py-1 rounded-lg text-sm font-bold border-2 tracking-wider shadow-lg bg-purple-600 border-purple-400";
+                } else {
+                    speakerBadge.className = "absolute -top-4 left-6 text-white px-5 py-1 rounded-lg text-sm font-bold border-2 tracking-wider shadow-lg bg-pink-600 border-pink-400";
+                }
+            } else {
+                speakerBadge.classList.add('hidden');
+            }
+
+            // Set Text
+            document.getElementById('dialogue-text').innerText = data.speaker === 'You' ? `"${data.text}"` : data.text;
+
+            // Water Offer Logic
+            const actionContainer = document.getElementById('special-action-container');
+            if (inventory.includes('Water Bottle') && !inventory.includes('Water Bottle (Used)') && (data.speaker === 'Amy' || data.speaker === 'Mina' || data.speaker === 'Janet' || data.speaker === 'Bob')) {
+                actionContainer.classList.remove('hidden');
+            } else {
+                actionContainer.classList.add('hidden');
+            }
+
+            // Set Choices / Next Button
+            const choicesContainer = document.getElementById('choices-container');
+            const nextContainer = document.getElementById('next-btn-container');
+            const nextBtnText = document.getElementById('next-btn-text');
+            const nextBtn = document.getElementById('next-btn');
+            
+            choicesContainer.innerHTML = ''; 
+
+            let primaryBtnColor = currentRoute === 'amy' ? 'bg-pink-600' : 'bg-purple-600';
+            let hoverBtnColor = currentRoute === 'amy' ? 'hover:bg-pink-500' : 'hover:bg-purple-500';
+            let glowBtnColor = currentRoute === 'amy' ? 'rgba(219,39,119,0.5)' : 'rgba(168,85,247,0.5)';
+
+            if (data.choices) {
+                choicesContainer.classList.remove('hidden');
+                nextContainer.classList.add('hidden');
+                
+                data.choices.forEach(choice => {
+                    const isLocked = choice.requireItem && !inventory.includes(choice.requireItem);
+                    const btn = document.createElement('button');
+                    
+                    if (isLocked) {
+                        btn.className = "w-full text-left px-4 py-2 sm:px-4 sm:py-3 rounded-xl transition-all duration-200 border shadow-md font-medium text-sm sm:text-base bg-slate-800 text-slate-500 border-slate-700 cursor-not-allowed";
+                        btn.innerHTML = `${choice.text} <span class="text-yellow-500 ml-2">(🔒 Requires ${choice.requireItem})</span>`;
+                        btn.disabled = true;
+                    } else {
+                        btn.className = `w-full text-left px-4 py-2 sm:px-4 sm:py-3 rounded-xl transition-all duration-200 border shadow-md font-medium text-sm sm:text-base bg-slate-800/80 hover:text-white border-slate-600 hover:pl-6 ${currentRoute === 'amy' ? 'hover:bg-pink-600/90 hover:border-pink-300' : 'hover:bg-purple-600/90 hover:border-purple-300'} text-slate-200`;
+                        btn.innerText = choice.text;
+                        btn.onclick = () => handleChoice(choice);
+                    }
+                    choicesContainer.appendChild(btn);
+                });
+            } else if (data.specialAction === 'startSkillCheck') {
+                choicesContainer.classList.add('hidden');
+                nextContainer.classList.remove('hidden');
+                nextBtnText.innerText = "Start Hacking!";
+                nextBtn.className = "bg-blue-600 hover:bg-blue-500 text-white px-8 py-2 rounded-xl font-black transition-all shadow-[0_0_20px_rgba(37,99,235,0.8)] animate-pulse text-base flex items-center gap-2";
+                nextBtn.onclick = () => { startSkillCheck(); };
+            } else if (data.specialAction === 'startCircleSkillCheck') {
+                choicesContainer.classList.add('hidden');
+                nextContainer.classList.remove('hidden');
+                nextBtnText.innerText = "Cast Line!";
+                nextBtn.className = "bg-purple-600 hover:bg-purple-500 text-white px-8 py-2 rounded-xl font-black transition-all shadow-[0_0_20px_rgba(168,85,247,0.8)] animate-pulse text-base flex items-center gap-2";
+                nextBtn.onclick = () => { startCircleSkillCheck(); };
+            } else if (data.specialAction === 'startColorMemoryGame') {
+                choicesContainer.classList.add('hidden');
+                nextContainer.classList.remove('hidden');
+                nextBtnText.innerText = "Start Memory Game";
+                nextBtn.className = "bg-purple-600 hover:bg-purple-500 text-white px-8 py-2 rounded-xl font-black transition-all shadow-[0_0_20px_rgba(168,85,247,0.8)] animate-pulse text-base flex items-center gap-2";
+                nextBtn.onclick = () => { startColorMemoryGame(); };
+            } else if (data.end) {
+                choicesContainer.classList.add('hidden');
+                nextContainer.classList.remove('hidden');
+                nextBtnText.innerText = "Complete Episode";
+                nextBtn.className = "bg-yellow-500 hover:bg-yellow-400 text-slate-900 px-8 py-2 rounded-xl font-black transition-all shadow-[0_0_15px_rgba(234,179,8,0.5)] animate-pulse text-base";
+                nextBtn.onclick = () => endGame();
+            } else {
+                choicesContainer.classList.add('hidden');
+                nextContainer.classList.remove('hidden');
+                nextBtnText.innerText = data.next === 'RETURN' ? 'Return to Conversation' : 'Next';
+                nextBtn.className = `${primaryBtnColor} ${hoverBtnColor} text-white px-8 py-2 rounded-xl font-bold transition-all shadow-[0_0_15px_${glowBtnColor}] flex items-center gap-2 group text-base`;
+                nextBtn.onclick = () => {
+                    if (data.next === 'RETURN') {
+                        currentNode = previousNode;
+                        previousNode = null;
+                        renderNode();
+                    } else {
+                        currentNode = data.next;
+                        renderNode();
+                    }
+                };
+            }
+        }
+
+        function handleChoice(choice) {
+            let popupTexts = [];
+            let isPositive = false;
+
+            if (choice.scoreChange) {
+                popupTexts.push(`${choice.scoreChange > 0 ? '+' : ''}${choice.scoreChange}% Friendship`);
+                if (choice.scoreChange > 0) isPositive = true;
+                friendScore = Math.max(0, Math.min(100, friendScore + choice.scoreChange));
+            }
+            
+            if (choice.coinChange) {
+                popupTexts.push(`+${choice.coinChange} Coins`);
+                isPositive = true;
+                coins += choice.coinChange;
+            }
+
+            if (popupTexts.length > 0) {
+                showScorePopup(popupTexts.join(' | '), isPositive);
+            }
+
+            updateHUD();
+
+            if (choice.next) {
+                currentNode = choice.next;
+                renderNode();
+            }
+        }
+
+        // ================= LINEAR SKILL CHECK (Hacking) ================= //
+        function startSkillCheck() {
+            document.getElementById('skill-check-modal').classList.remove('hidden');
+            document.getElementById('skill-check-modal').classList.add('flex');
+            skillHits = 0;
+            // Make Amy's Episode 4 skillcheck 30% slower for added challenge
+            const baseSpeed = 1.3;
+            skillSpeed = (currentNode === 'ep4_trigger') ? baseSpeed * 0.7 : baseSpeed;
+            updateSkillUI();
+            resetSkillRound();
+            animateSkillCheck();
+        }
+
+        function resetSkillRound() {
+            currentSkillTargetWidth = Math.max(8, 25 - (skillHits * 1.5)); 
+            currentSkillTargetLeft = 5 + Math.random() * (90 - currentSkillTargetWidth);
+            
+            document.getElementById('skill-target').style.left = currentSkillTargetLeft + '%';
+            document.getElementById('skill-target').style.width = currentSkillTargetWidth + '%';
+            
+            cursorPosition = 0;
+            cursorDirection = 1;
+        }
+
+        function animateSkillCheck() {
+            cursorPosition += cursorDirection * skillSpeed;
+            if (cursorPosition >= 100) {
+                cursorPosition = 100;
+                cursorDirection = -1;
+            } else if (cursorPosition <= 0) {
+                cursorPosition = 0;
+                cursorDirection = 1;
+            }
+            
+            document.getElementById('skill-cursor').style.left = cursorPosition + '%';
+            skillAnimFrame = requestAnimationFrame(animateSkillCheck);
+        }
+
+        function hitSkillCheck() {
+            if (cursorPosition >= currentSkillTargetLeft && cursorPosition <= (currentSkillTargetLeft + currentSkillTargetWidth)) {
+                skillHits++;
+                coins += 5; 
+                
+                updateSkillUI();
+                updateHUD(); 
+                
+                if (skillHits >= 10) {
+                    winSkillCheck();
+                } else {
+                    showScorePopup("GOOD HIT! +5 Coins", true);
+                    resetSkillRound();
+                }
+            } else {
+                failSkillCheck();
+            }
+        }
+
+        function updateSkillUI() {
+            document.getElementById('skill-progress').innerText = skillHits;
+        }
+
+        function winSkillCheck() {
+            cancelAnimationFrame(skillAnimFrame);
+            document.getElementById('skill-check-modal').classList.add('hidden');
+            document.getElementById('skill-check-modal').classList.remove('flex');
+            
+            friendScore = Math.min(100, friendScore + 20);
+            showScorePopup("PERFECT! +5 Coins & +20% Friendship", true);
+            updateHUD();
+            
+            currentNode = 'ep4_success';
+            renderNode();
+        }
+
+        function failSkillCheck() {
+            cancelAnimationFrame(skillAnimFrame);
+            document.getElementById('skill-check-modal').classList.add('hidden');
+            document.getElementById('skill-check-modal').classList.remove('flex');
+            
+            showScorePopup("FAILED! Mechanism Reset...", false);
+            currentNode = 'ep4_start';
+            renderNode();
+        }
+
+
+        // ================= CIRCULAR SKILL CHECK (Fishing) ================= //
+        function startCircleSkillCheck() {
+            document.getElementById('skill-check-circle-modal').classList.remove('hidden');
+            document.getElementById('skill-check-circle-modal').classList.add('flex');
+            circHits = 0;
+            circSpeed = 2.0; 
+            updateCircleSkillUI();
+            resetCircleSkillRound();
+            animateCircleSkillCheck();
+        }
+
+        function resetCircleSkillRound() {
+            circTargetSize = Math.max(30, 60 - (circHits * 10)); // target shrinks each time
+            circTargetStart = 20 + Math.random() * (340 - circTargetSize - 40); // random position
+            circAngle = 0;
+            drawCircleTrack();
+        }
+
+        function drawCircleTrack() {
+            const track = document.getElementById('circle-track');
+            track.style.background = `conic-gradient(from 0deg, transparent 0deg, transparent ${circTargetStart}deg, #22c55e ${circTargetStart}deg, #22c55e ${circTargetStart + circTargetSize}deg, transparent ${circTargetStart + circTargetSize}deg, transparent 360deg)`;
+        }
+
+        function animateCircleSkillCheck() {
+            circAngle += circSpeed;
+            if (circAngle >= 360) circAngle -= 360;
+            
+            document.getElementById('circle-cursor').style.transform = `translateX(-50%) rotate(${circAngle}deg)`;
+            circAnimFrame = requestAnimationFrame(animateCircleSkillCheck);
+        }
+
+        function hitCircleSkillCheck() {
+            if (circAngle >= circTargetStart && circAngle <= (circTargetStart + circTargetSize)) {
+                circHits++;
+                coins += 5;
+                updateCircleSkillUI();
+                updateHUD();
+                
+                if (circHits >= 3) { 
+                    winCircleSkillCheck();
+                } else {
+                    showScorePopup("GOOD REEL! +5 Coins", true);
+                    resetCircleSkillRound();
+                }
+            } else {
+                failCircleSkillCheck();
+            }
+        }
+
+        function updateCircleSkillUI() {
+            document.getElementById('circle-skill-progress').innerText = circHits;
+        }
+
+        function winCircleSkillCheck() {
+            cancelAnimationFrame(circAnimFrame);
+            document.getElementById('skill-check-circle-modal').classList.add('hidden');
+            document.getElementById('skill-check-circle-modal').classList.remove('flex');
+            
+            friendScore = Math.min(100, friendScore + 20);
+            showScorePopup("SUCCESS! +20% Friendship", true);
+            updateHUD();
+            
+            currentNode = 'mina_success';
+            renderNode();
+        }
+
+        function failCircleSkillCheck() {
+            cancelAnimationFrame(circAnimFrame);
+            document.getElementById('skill-check-circle-modal').classList.add('hidden');
+            document.getElementById('skill-check-circle-modal').classList.remove('flex');
+            
+            showScorePopup("FAILED! Tool sank deeper...", false);
+            currentNode = 'mina_fail';
+            renderNode();
+        }
+
+
+        // ================= GENERAL SYSTEMS ================= //
+        function offerDrink() {
+            // Siblings reject the offer; it hurts friendship.
+            if (currentRoute === 'siblings') {
+                friendScore = Math.max(0, friendScore - 20);
+                inventory = inventory.filter(i => i !== 'Water Bottle');
+                inventory.push('Water Bottle (Used)');
+
+                updateHUD();
+                showScorePopup("-20% Friendship (Rejected Water)", false);
+
+                previousNode = currentNode;
+                currentNode = 'siblings_after_water';
+                renderNode();
+                return;
+            }
+
+            friendScore = Math.min(100, friendScore + 10);
+            inventory = inventory.filter(i => i !== 'Water Bottle');
+            inventory.push('Water Bottle (Used)');
+            
+            updateHUD();
+            showScorePopup("+10% Friendship (Offered Water)", true);
+            
+            previousNode = currentNode;
+            currentNode = currentRoute === 'amy' ? 'drink_thanks' : 'mina_drink_thanks';
+            renderNode();
+        }
+
+        function endGame() {
+            showScreen('end-screen');
+            if (friendScore >= 75) {
+                document.getElementById('end-content-best-friends').classList.remove('hidden');
+                document.getElementById('end-content-best-friends').classList.add('flex');
+                document.getElementById('end-content-acquaintances').classList.add('hidden');
+                document.getElementById('final-score-high').innerText = friendScore;
+            } else {
+                document.getElementById('end-content-acquaintances').classList.remove('hidden');
+                document.getElementById('end-content-acquaintances').classList.add('flex');
+                document.getElementById('end-content-best-friends').classList.add('hidden');
+                document.getElementById('final-score-low').innerText = friendScore;
+            }
+        }
+
+        // Color Memory Sequence Game (Mina Episode 2)
+        function startColorMemoryGame() {
+            // Give the player the mystery ball if they haven't received it yet.
+            if (!inventory.includes('Mystery Ball')) {
+                inventory.push('Mystery Ball');
+                showNotification('🟣 You received a Mystery Ball!');
+                updateHUD();
+            }
+
+            colorMemoryState.round = 1;
+            colorMemoryState.correct = 0;
+            colorMemoryState.sequence = [];
+            colorMemoryState.inputIndex = 0;
+            colorMemoryState.totalRounds = 6;
+            colorMemoryState.active = true;
+            document.getElementById('color-memory-modal').classList.remove('hidden');
+            document.getElementById('color-memory-modal').classList.add('flex');
+            playNextSequenceRound();
+        }
+
+        function getPaletteForRound(round) {
+            const baseColors = [
+                { name: 'Green', css: 'bg-emerald-500' },
+                { name: 'Blue', css: 'bg-blue-500' },
+                { name: 'Red', css: 'bg-red-500' },
+                { name: 'Yellow', css: 'bg-amber-400' }
+            ];
+            const purple = { name: 'Purple', css: 'bg-purple-500' };
+            const orange = { name: 'Orange', css: 'bg-orange-400' };
+
+            // Rounds 1-3: 4 color palette, sequences of length 3
+            // Rounds 4-5: 6 color palette, sequences of length 4
+            // Round 6: 6 color palette, sequence of length 6
+            if (round <= 3) {
+                return [...baseColors];
+            }
+            return [...baseColors, purple, orange];
+        }
+
+        function getSequenceLengthForRound(round) {
+            if (round <= 3) return 3;
+            if (round <= 5) return 4;
+            return 6;
+        }
+
+        function playNextSequenceRound() {
+            const round = colorMemoryState.round;
+            const palette = getPaletteForRound(round);
+            const sequenceLength = getSequenceLengthForRound(round);
+
+            // Generate full sequence for this round
+            colorMemoryState.sequence = [];
+            for (let i = 0; i < sequenceLength; i++) {
+                const nextColor = palette[Math.floor(Math.random() * palette.length)];
+                colorMemoryState.sequence.push(nextColor);
+            }
+            colorMemoryState.inputIndex = 0;
+
+            document.getElementById('color-memory-status').innerText = `Round ${round} / ${colorMemoryState.totalRounds}`;
+
+            // Show/hide optional pads based on palette
+            const purplePad = document.getElementById('simon-pad-purple');
+            const orangePad = document.getElementById('simon-pad-orange');
+
+            if (palette.some(c => c.name === 'Purple')) {
+                purplePad.classList.remove('hidden');
+            } else {
+                purplePad.classList.add('hidden');
+            }
+
+            if (palette.some(c => c.name === 'Orange')) {
+                orangePad.classList.remove('hidden');
+            } else {
+                orangePad.classList.add('hidden');
+            }
+
+            const pads = document.querySelectorAll('.simon-pad');
+            pads.forEach(pad => {
+                pad.disabled = true;
+                pad.classList.remove('brightness-150', 'shadow-[0_0_50px_rgba(255,255,255,0.9)]');
+                pad.onclick = () => handleSequenceInput(pad.dataset.color);
+            });
+
+            document.getElementById('color-memory-instructions').innerText = 'Watch the sequence...';
+            showSequencePlayback();
+        }
+
+        function showSequencePlayback() {
+            const seq = Array.isArray(colorMemoryState.sequence) ? colorMemoryState.sequence : [];
+            if (!seq.length) {
+                const instr = document.getElementById('color-memory-instructions');
+                if (instr) instr.innerText = 'No sequence available.';
+                return;
+            }
+
+            let idx = 0;
+            const instructionEl = document.getElementById('color-memory-instructions');
+            const pads = Array.from(document.querySelectorAll('.simon-pad')).filter(p => !p.classList.contains('hidden'));
+            pads.forEach(pad => pad.disabled = true);
+
+            const flashPad = (colorName) => {
+                const pad = document.querySelector(`.simon-pad[data-color="${colorName}"]`);
+                if (!pad) return;
+                pad.classList.add('brightness-150', 'shadow-[0_0_50px_rgba(255,255,255,0.9)]');
+                setTimeout(() => {
+                    pad.classList.remove('brightness-150', 'shadow-[0_0_50px_rgba(255,255,255,0.9)]');
+                }, 500);
+            };
+
+            const playNext = () => {
+                if (idx >= seq.length) {
+                    pads.forEach(pad => pad.disabled = false);
+                    if (instructionEl) instructionEl.innerText = 'Your turn! Repeat the sequence.';
+                    return;
+                }
+
+                flashPad(seq[idx].name);
+                idx += 1;
+                setTimeout(playNext, 800);
+            };
+
+            if (instructionEl) instructionEl.innerText = 'Watch the sequence...';
+            playNext();
+        }
+
+        function restartColorMemoryGame() {
+            colorMemoryState.active = false;
+            colorMemoryState.round = 1;
+            colorMemoryState.correct = 0;
+            colorMemoryState.sequence = [];
+            colorMemoryState.inputIndex = 0;
+
+            const pads = document.querySelectorAll('.simon-pad');
+            pads.forEach(pad => pad.disabled = true);
+            document.getElementById('color-memory-instructions').innerText = 'Restarting...';
+
+            setTimeout(() => {
+                colorMemoryState.active = true;
+                playNextSequenceRound();
+            }, 900);
+        }
+
+        function handleSequenceInput(selected) {
+            if (!colorMemoryState.active) return;
+
+            const expected = colorMemoryState.sequence[colorMemoryState.inputIndex].name;
+            if (selected === expected) {
+                colorMemoryState.inputIndex += 1;
+
+                if (colorMemoryState.inputIndex >= colorMemoryState.sequence.length) {
+                    // Completed round
+                    colorMemoryState.correct += 1;
+                    showScorePopup('+1 Round Complete', true);
+
+                    if (colorMemoryState.round >= colorMemoryState.totalRounds) {
+                        endColorMemoryGame();
+                    } else {
+                        colorMemoryState.round += 1;
+                        playNextSequenceRound();
+                    }
+                }
+            } else {
+                showScorePopup('Wrong! Restarting...', false);
+                friendScore = Math.max(0, friendScore - 5);
+                updateHUD();
+                restartColorMemoryGame();
+            }
+        }
+
+        function endColorMemoryGame(skipped = false) {
+            if (!colorMemoryState.active) return;
+            colorMemoryState.active = false;
+            document.getElementById('color-memory-modal').classList.add('hidden');
+            document.getElementById('color-memory-modal').classList.remove('flex');
+
+            if (!skipped) {
+                const perfect = colorMemoryState.correct === colorMemoryState.totalRounds;
+                if (perfect) {
+                    friendScore = Math.min(100, friendScore + 10);
+                    showScorePopup('+10% Friendship (Perfect Memory)', true);
+                } else {
+                    friendScore = Math.max(0, friendScore - 5);
+                    showScorePopup('-5% Friendship', false);
+                }
+                updateHUD();
+            }
+
+            // Proceed to end of Mina Episode 2
+            currentNode = 'mina_ep2_complete';
+            renderNode();
+        }
+
+        // Modals Logic
+        function openShop() {
+            document.getElementById('shop-modal').classList.remove('hidden');
+            document.getElementById('shop-modal').classList.add('flex');
+            renderShop();
+        }
+        function closeShop() {
+            document.getElementById('shop-modal').classList.add('hidden');
+            document.getElementById('shop-modal').classList.remove('flex');
+        }
+
+        function renderShop() {
+            document.getElementById('shop-coins').innerText = `🟡 ${coins}`;
+            const container = document.getElementById('shop-items-container');
+            container.innerHTML = '';
+            
+            SHOP_ITEMS.forEach(item => {
+                const isOwned = inventory.includes(item.id) || (item.id === 'Water Bottle' && inventory.includes('Water Bottle (Used)'));
+                const canAfford = coins >= item.price;
+                
+                const div = document.createElement('div');
+                div.className = "bg-slate-800 p-4 rounded-xl flex justify-between items-center border border-slate-700 hover:border-indigo-400 transition-colors";
+                
+                div.innerHTML = `
+                    <div>
+                        <div class="font-bold text-white text-lg">${item.icon} ${item.id}</div>
+                    </div>
+                `;
+                
+                const btn = document.createElement('button');
+                btn.className = "bg-yellow-500 hover:bg-yellow-400 disabled:bg-slate-700 disabled:text-slate-500 text-slate-900 px-5 py-2 rounded-lg font-bold shadow-md shrink-0 ml-4";
+                btn.innerText = isOwned ? 'Owned' : `${item.price} 🟡`;
+                btn.disabled = !canAfford || isOwned;
+                
+                btn.onclick = () => {
+                    coins -= item.price;
+                    inventory.push(item.id);
+                    updateHUD();
+                    renderShop(); 
+                    renderNode(); 
+                    showScorePopup(`Bought ${item.id}!`, true);
+                    
+                    if (item.id === 'Secret Diary') {
+                        showNotification("📖 Secret Diary unlocked in your menu!");
+                            if (currentRoute === 'amy') {
+                                siblingsUnlocked = true;
+                                localStorage.setItem('campOhioSiblingsUnlocked', 'true');
+                                const siblingsLockedOverlay = document.getElementById('siblings-locked');
+                                if (siblingsLockedOverlay) siblingsLockedOverlay.classList.add('hidden');
+                                showNotification("🔓 New Route Unlocked: Siblings!");
+                            }
+            
+            // Only show secret diaries if viewing from inside an active game with the item
+            if (inventory.includes('Secret Diary') && document.getElementById('start-screen').classList.contains('hidden')) {
+                let secretNote = currentRoute === 'amy' 
+                    ? "If you're reading this, I trust you enough to share my personal stash of notes.\n\n- Counselor Steve's weakness: He needs to recharge his solar cells exactly at 3 AM.\n\nTrust no one else."
+                    : "Mina's scrawled notes:\n\n- The speakers are wired in series. Break one, you break the chain.\n- Keep an eye on the lake. The reflections don't match reality.";
+                
+                all.push({
+                    id: 5,
+                    title: `Diary #5: ${currentRoute === 'amy' ? "Amy's" : "Mina's"} Secret Notes`,
+                    content: secretNote
+                });
+            }
+            return all.sort((a, b) => a.id - b.id);
+        }
+
+        function openDiary() {
+            document.getElementById('diary-modal').classList.remove('hidden');
+            document.getElementById('diary-modal').classList.add('flex');
+            
+            const container = document.getElementById('diary-content-container');
+            container.innerHTML = '';
+            
+            const allD = getAllDiaries();
+            if (allD.length === 0) {
+                container.innerHTML = '<p class="italic text-slate-500 text-xl text-center mt-20">No memories unlocked yet... Start playing to unlock them.</p>';
+            } else {
+                allD.forEach(d => {
+                    const div = document.createElement('div');
+                    div.className = "bg-amber-100/50 p-6 rounded-xl border border-amber-900/10";
+                    div.innerHTML = `
+                        <h3 class="text-2xl font-bold mb-4 text-amber-900">${d.title}</h3>
+                        <p class="text-lg leading-relaxed whitespace-pre-wrap text-slate-800 font-serif">${d.content}</p>
+                    `;
+                    container.appendChild(div);
+                });
+            }
+        }
+        function closeDiary() {
+            document.getElementById('diary-modal').classList.add('hidden');
+            document.getElementById('diary-modal').classList.remove('flex');
+        }
+
+        // ================= PROFILE GALLERY & VIEWING ================= //
+
+        function openProfileGallery() {
+            document.getElementById('profile-gallery-modal').classList.remove('hidden');
+            document.getElementById('profile-gallery-modal').classList.add('flex');
+            
+            const grid = document.getElementById('gallery-grid');
+            grid.innerHTML = '';
+            
+            const allChars = [
+                { id: 'amy', name: 'Amy', img: './image_44fc01.jpg', border: 'border-pink-500/50', hover: 'hover:border-pink-400', text: 'text-pink-400', iconBorder: 'border-pink-400' },
+                { id: 'mina', name: 'Mina', img: './mina.jpg', border: 'border-purple-500/50', hover: 'hover:border-purple-400', text: 'text-purple-400', iconBorder: 'border-purple-400' },
+                { id: 'janet', name: 'Janet', img: './janet.jpg', border: 'border-emerald-500/50', hover: 'hover:border-emerald-400', text: 'text-emerald-400', iconBorder: 'border-emerald-400' },
+                { id: 'bob', name: 'Bob', img: './bob.jpg', border: 'border-sky-500/50', hover: 'hover:border-sky-400', text: 'text-sky-400', iconBorder: 'border-sky-400' }
+            ];
+            
+            allChars.forEach(char => {
+                const isUnlocked = unlockedProfiles.includes(char.id);
+                const div = document.createElement('div');
+                
+                if (isUnlocked) {
+                    div.className = `bg-slate-800 p-4 rounded-2xl border-2 ${char.border} ${char.hover} hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] transition-all cursor-pointer flex flex-col items-center group`;
+                    div.onclick = () => openSpecificProfile(char.id);
+                    div.innerHTML = `
+                        <div class="w-24 h-24 rounded-full overflow-hidden border-2 ${char.iconBorder} mb-3 group-hover:scale-110 transition-transform">
+                            <img src="${char.img}" class="w-full h-full object-cover" />
+                        </div>
+                        <h3 class="text-xl font-bold ${char.text}">${char.name}</h3>
+                    `;
+                } else {
+                    div.className = `bg-slate-900 p-4 rounded-2xl border-2 border-slate-700 flex flex-col items-center opacity-60 grayscale`;
+                    div.innerHTML = `
+                        <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-slate-600 mb-3 bg-slate-800 flex items-center justify-center">
+                            <span class="text-4xl text-slate-600">?</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-500">Locked</h3>
+                    `;
+                }
+                grid.appendChild(div);
+            });
+        }
+
+        function closeProfileGallery() {
+            document.getElementById('profile-gallery-modal').classList.add('hidden');
+            document.getElementById('profile-gallery-modal').classList.remove('flex');
+        }
+
+        function openSpecificProfile(charId) {
+            const modalBox = document.getElementById('profile-modal-box');
+            
+            if (charId === 'amy') {
+                modalBox.className = "bg-slate-900 border-4 border-pink-500 text-slate-200 w-full max-w-2xl rounded-3xl p-8 shadow-[0_0_50px_rgba(236,72,153,0.5)] relative";
+                document.getElementById('prof-header-name').className = "text-4xl font-black mb-6 border-b-2 border-slate-700 pb-4 text-pink-400";
+                document.getElementById('prof-img').src = "./image_44fc01.jpg";
+                document.getElementById('prof-name').innerText = "Amy";
+                document.getElementById('prof-loc').innerText = "Cabin 5";
+                document.getElementById('prof-traits').innerHTML = "Paranoid, brilliant, highly observant.";
+                document.getElementById('prof-secret-box').className = "bg-slate-800 p-4 rounded-xl border-l-4 border-pink-500 mt-4 shadow-inner";
+                document.getElementById('prof-secret-title').innerText = "Amy's Secret Sidenote:";
+                document.getElementById('prof-secret-title').className = "text-sm font-bold text-pink-400 uppercase tracking-widest mb-2";
+                document.getElementById('prof-secret-text').innerText = "\"The anomaly seems to be centered around the lake. I've noticed the water doesn't reflect the sky correctly.\"";
+            } else if (charId === 'mina') {
+                modalBox.className = "bg-slate-900 border-4 border-purple-500 text-slate-200 w-full max-w-2xl rounded-3xl p-8 shadow-[0_0_50px_rgba(168,85,247,0.5)] relative";
+                document.getElementById('prof-header-name').className = "text-4xl font-black mb-6 border-b-2 border-slate-700 pb-4 text-purple-400";
+                document.getElementById('prof-img').src = "./mina.jpg";
+                document.getElementById('prof-name').innerText = "Mina Monroe";
+                document.getElementById('prof-loc').innerText = "Old Boathouse";
+                document.getElementById('prof-traits').innerHTML = "Rebellious, goth, incredibly sarcastic.<br><br><strong class='text-purple-300'>Relationships:</strong> Amy (Roommate - <em class='text-slate-400'>Slightly Annoyed</em>)";
+                document.getElementById('prof-secret-box').className = "bg-slate-800 p-4 rounded-xl border-l-4 border-purple-500 mt-4 shadow-inner";
+                document.getElementById('prof-secret-title').innerText = "Mina's Secret Sidenote:";
+                document.getElementById('prof-secret-title').className = "text-sm font-bold text-purple-400 uppercase tracking-widest mb-2";
+                document.getElementById('prof-secret-text').innerText = "\"I hate this summer camp. My parents forced me here and I'm only sticking around because I want out. If you want to survive, don't trust the counselors.\"";
+            } else if (charId === 'janet') {
+                modalBox.className = "bg-slate-900 border-4 border-emerald-500 text-slate-200 w-full max-w-2xl rounded-3xl p-8 shadow-[0_0_50px_rgba(34,197,94,0.5)] relative";
+                document.getElementById('prof-header-name').className = "text-4xl font-black mb-6 border-b-2 border-slate-700 pb-4 text-emerald-400";
+                document.getElementById('prof-img').src = "./janet.jpg";
+                document.getElementById('prof-name').innerText = "Janet Reeves";
+                document.getElementById('prof-loc').innerText = "Campfire Circle";
+                document.getElementById('prof-traits').innerHTML = "Friendly, responsible, always ready with a first-aid kit.<br><br><strong class='text-emerald-300'>Relationships:</strong> Brother Bob (Overprotective)";
+                document.getElementById('prof-secret-box').className = "bg-slate-800 p-4 rounded-xl border-l-4 border-emerald-500 mt-4 shadow-inner";
+                document.getElementById('prof-secret-title').innerText = "Janet's Secret Sidenote:";
+                document.getElementById('prof-secret-title').className = "text-sm font-bold text-emerald-400 uppercase tracking-widest mb-2";
+                document.getElementById('prof-secret-text').innerText = "\"I'm just here to earn my camper badge. But something about that girl (Amy) and you feels... off. I don't like secrets.\"";
+            } else if (charId === 'bob') {
+                modalBox.className = "bg-slate-900 border-4 border-sky-500 text-slate-200 w-full max-w-2xl rounded-3xl p-8 shadow-[0_0_50px_rgba(56,189,248,0.5)] relative";
+                document.getElementById('prof-header-name').className = "text-4xl font-black mb-6 border-b-2 border-slate-700 pb-4 text-sky-400";
+                document.getElementById('prof-img').src = "./bob.jpg";
+                document.getElementById('prof-name').innerText = "Bob Reeves";
+                document.getElementById('prof-loc').innerText = "Campfire Circle";
+                document.getElementById('prof-traits').innerHTML = "Eager, a bit naive, but loyal to his sister.<br><br><strong class='text-sky-300'>Relationships:</strong> Sister Janet (Protects her fiercely)";
+                document.getElementById('prof-secret-box').className = "bg-slate-800 p-4 rounded-xl border-l-4 border-sky-500 mt-4 shadow-inner";
+                document.getElementById('prof-secret-title').innerText = "Bob's Secret Sidenote:";
+                document.getElementById('prof-secret-title').className = "text-sm font-bold text-sky-400 uppercase tracking-widest mb-2";
+                document.getElementById('prof-secret-text').innerText = "\"I just wanna earn my badges and roast marshmallows. Still, I couldn't shake the feeling that something's wrong with this camp.\"";
+            }
+
+            document.getElementById('profile-modal').classList.remove('hidden');
+            document.getElementById('profile-modal').classList.add('flex');
+        }
+
+        function openProfile() {
+            openSpecificProfile(currentRoute);
+        }
+
+        function closeProfile() {
+            document.getElementById('profile-modal').classList.add('hidden');
+            document.getElementById('profile-modal').classList.remove('flex');
+        }
+
+
+        // Global Key Listener for Spacebar
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                
+                // Route to correct minigame if active
+                const skillModal = document.getElementById('skill-check-modal');
+                const circleModal = document.getElementById('skill-check-circle-modal');
+                const colorModal = document.getElementById('color-memory-modal');
+                
+                if (!skillModal.classList.contains('hidden')) {
+                    hitSkillCheck();
+                    return; 
+                }
+                
+                if (!circleModal.classList.contains('hidden')) {
+                    hitCircleSkillCheck();
+                    return;
+                }
+
+                if (!colorModal.classList.contains('hidden')) {
+                    // Space does not interfere with the memory game.
+                    return;
+                }
+
+                // Route to Diary logic
+                const diaryModal = document.getElementById('diary-modal');
+                if (diaryModal.classList.contains('hidden')) {
+                    if (!document.getElementById('game-screen').classList.contains('hidden') || !document.getElementById('end-screen').classList.contains('hidden')) {
+                        openDiary();
+                    }
+                } else {
+                    closeDiary();
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>
